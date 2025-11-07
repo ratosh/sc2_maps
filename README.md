@@ -7,7 +7,7 @@ Embedding mods files into a SC2 map, can be changed to support more mods but for
 Using build_sc2map.py the script to merge folders and pack the map
 
 Usage:
-    python build_sc2map.py /path/to/GamePatch /path/to/ExtraFixes /path/to/MapFolder [--force]
+    python build_sc2map.py  /path/to/MapFolder /path/to/GamePatch /path/to/ExtraFixes [--force]
 
 ```sh
 python build_sc2map.py maps/PylonAIE mods/Patch_5_0_14 mods/AiArenaExtraFixes PylonAIE_5_0_14 --force
