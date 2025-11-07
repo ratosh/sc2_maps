@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CEffectDamage id="VoidRayDamage">
+        <AttributeBonus index="Armored" value="4"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectDamage id="VoidRayBoostedDamage">
+        <AttributeBonus index="Armored" value="10"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+</Catalog>

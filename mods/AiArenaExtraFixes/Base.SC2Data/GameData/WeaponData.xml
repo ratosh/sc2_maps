@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+	<CWeaponLegacy id="ATSLaserBattery_AiArena" parent="ATSLaserBattery">
+		<Options index="Hidden" value="0" />
+		<TargetFilters value="Dead" />
+	</CWeaponLegacy>
+	<CWeaponLegacy id="ATALaserBattery_AiArena" parent="ATALaserBattery">
+		<Options index="Hidden" value="0" />
+		<TargetFilters value="Dead" />
+	</CWeaponLegacy>
+	<CWeaponLegacy id="VoidRay_API_Normal">
+		<Options index="Hidden" value="0" />
+		<Range value="6" />
+		<Period value="0.5" />
+        <Effect value=""/>
+        <DisplayEffect value="VoidRayDamage"/>
+		<TargetFilters value="Dead" />
+	</CWeaponLegacy>
+	<CWeaponLegacy id="VoidRay_API_Boosted">
+		<Options index="Hidden" value="0" />
+		<Options index="Disabled" value="1" />
+		<Range value="6" />
+		<Period value="0.5" />
+        <Effect value=""/>
+        <DisplayEffect value="VoidRayBoostedDamage"/>
+		<TargetFilters value="Dead" />
+	</CWeaponLegacy>
+</Catalog>

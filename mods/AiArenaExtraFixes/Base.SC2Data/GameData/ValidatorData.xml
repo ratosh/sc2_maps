@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+	<CValidatorCombine id="Validator_Never">
+		<CombineArray value="IsNotLarva" />
+		<CombineArray value="IsLarva" />
+	</CValidatorCombine>
+</Catalog>
