@@ -1,5 +1,6 @@
 # sc2_maps
-Supporting new sc2 maps
+
+Embedding mods files into a SC2 map, can be changed to support more mods but for this repo always having 2 is the desired behavior.
 
 ## How to use
 
@@ -11,10 +12,3 @@ Usage:
 ```sh
 python build_sc2map.py maps/PylonAIE mods/Patch_5_0_14 mods/AiArenaExtraFixes PylonAIE_5_0_14 --force
 ```
-
-## TODO
-
-Patching all files (right now we only patch xml files):
-* Patch folder has all patch files (extracted with casc)
-* Put map name inside GameStrings.txt on the map folder
-* Merge txt files as key value lines
