@@ -81,7 +81,7 @@ def merge_txt_files(base: Path, patch: Path, extra: Path, out_file: Path) -> Non
         data = {}
         if not path.exists():
             return data
-        for line in path.read_text(encoding="utf-8", errors="ignore").splitlines():
+        for line in path.read_text(encoding="utf-8-sig", errors="ignore").splitlines():
             if "=" in line and not line.strip().startswith("#"):
                 k, v = line.split("=", 1)
                 data[k.strip()] = v.strip()
@@ -95,11 +95,11 @@ def merge_txt_files(base: Path, patch: Path, extra: Path, out_file: Path) -> Non
     for src, name in [(patch_kv, "patch"), (extra_kv, "extra")]:
         for k, v in src.items():
             if k in merged and merged[k] != v:
-                print(f"⚠️  Conflict on '{k}' → using {name} value ({v})")
+                print(f"⚠️ TXT Merger Conflict: On '{k}' → using {name} value ({v})")
             merged[k] = v
 
     out_file.parent.mkdir(parents=True, exist_ok=True)
-    with out_file.open("w", encoding="utf-8") as f:
+    with out_file.open("w", encoding="utf-8", newline="\n") as f:
         for k, v in sorted(merged.items()):
             f.write(f"{k}={v}\n")
 
