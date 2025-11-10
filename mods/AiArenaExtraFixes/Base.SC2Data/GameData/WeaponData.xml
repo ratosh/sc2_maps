@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-	<CWeaponLegacy id="ATSLaserBattery_AiArena" parent="ATSLaserBattery">
+	<CWeaponLegacy id="AiArenaATSLaserBattery" parent="ATSLaserBattery">
 		<Options index="Hidden" value="0" />
 		<TargetFilters value="Dead" />
 	</CWeaponLegacy>
-	<CWeaponLegacy id="ATALaserBattery_AiArena" parent="ATALaserBattery">
+	<CWeaponLegacy id="AiArenaATALaserBattery" parent="ATALaserBattery">
 		<Options index="Hidden" value="0" />
 		<TargetFilters value="Dead" />
 	</CWeaponLegacy>
-	<CWeaponLegacy id="VoidRay_API_Normal">
+	<CWeaponLegacy id="AiArenaVoidRayNormal">
 		<Options index="Hidden" value="0" />
 		<Range value="6" />
 		<Period value="0.5" />
-        <Effect value=""/>
-        <DisplayEffect value="VoidRayDamage"/>
+		<Effect value="" />
+		<DisplayEffect value="AiArenaVoidRayDamage" />
 		<TargetFilters value="Dead" />
 	</CWeaponLegacy>
-	<CWeaponLegacy id="VoidRay_API_Boosted">
-		<Options index="Hidden" value="0" />
-		<Options index="Disabled" value="1" />
-		<Range value="6" />
-		<Period value="0.5" />
-        <Effect value=""/>
-        <DisplayEffect value="VoidRayBoostedDamage"/>
+	<CWeaponLegacy id="AiArenaVolatileBurst">
+		<Range value="0.25" />
+		<Period value="0.833" />
+		<DisplayEffect value="AiArenaBanelingDamage" />
 		<TargetFilters value="Dead" />
+	</CWeaponLegacy>
+	<CWeaponLegacy id="AiArenaOracleDisplayDummy">
+		<EditorCategories value="Race:Protoss" />
+		<Options index="CanInitiateAttackOrder" value="0" />
+		<DisplayEffect value="OracleWeaponDamage" />
+		<TargetFilters value="Dead" />
+		<Range value="4" />
+		<Period value="0.86" />
+	</CWeaponLegacy>
+    <CWeaponLegacy id="DisruptionBeam">
+        <Options index="Hidden" value="0"/>
+	</CWeaponLegacy>
+    <CWeaponLegacy id="WidowMineDummy">
+        <Options index="Hidden" value="0"/>
 	</CWeaponLegacy>
 </Catalog>

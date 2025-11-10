@@ -2,8 +2,8 @@
 <Catalog>
 	<CBehaviorBuff id="VoidRaySwarmDamageBoost">
 		<Modification>
-            <WeaponEnableArray value="VoidRay_API_Boosted"/>
-            <WeaponDisableArray value="VoidRay_API_Normal"/>
+            <WeaponEnableArray value="AiArenaVoidRayBoosted"/>
+            <WeaponDisableArray value="AiArenaVoidRayNormal"/>
 		</Modification>
 	</CBehaviorBuff>
 </Catalog>
