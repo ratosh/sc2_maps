@@ -33,9 +33,10 @@ jobs:
       - name: Build SC2 map
         run: |
           mkdir -p Output
-          BASE="maps/${{ matrix.map%%_* }}"  # extract "maps/PylonAIE"
-          echo "=== Building map: ${{ matrix.map }} (from $BASE) ==="
-          python build_sc2map.py "$BASE" mods/Patch_5_0_14 mods/AiArenaExtraFixes "Output/${{ matrix.map }}"
+          MAP="${{ matrix.map }}"
+          BASE="maps/${MAP%%_*}"  # Bash expansion happens here
+          echo "=== Building map: $MAP (from $BASE) ==="
+          python build_sc2map.py "$BASE" mods/Patch_5_0_14 mods/AiArenaExtraFixes "Output/$MAP"
           echo "✅ Map built:"
           ls -lh Output/
 
@@ -44,8 +45,18 @@ jobs:
 
       - name: Run weapon check bot
         run: |
+          MAP="${{ matrix.map }}"
+          echo "=== Running validation for $MAP ==="
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
             -v "${{ github.workspace }}/Output:/root/StarCraftII/Maps" \
             cpp-sc2/docker-sc2:latest \
-            /bin/bash -c "cd /workspace && python game_check/weapon_check_bot.py --map ${{ matrix.map }}"
+            /bin/bash -c "
+              cd /workspace && \
+              python game_check/weapon_check_bot.py --map $MAP; \
+              RET=\$?; \
+              if [ \$RET -ne 0 ]; then
+                echo '❌ Validation failed for' $MAP
+                exit 1
+              fi
+            "
