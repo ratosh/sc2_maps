@@ -35,7 +35,6 @@ EXPECTED_WEAPONS = {
     UnitTypeId.BATTLECRUISER: 2,
     UnitTypeId.PLANETARYFORTRESS: 1,
     UnitTypeId.MISSILETURRET: 1,
-    UnitTypeId.BUNKER: 0,
 
     # --- Protoss ---
     UnitTypeId.ZEALOT: 1,
@@ -75,13 +74,16 @@ EXPECTED_WEAPONS = {
     UnitTypeId.BROODLING: 1,
     UnitTypeId.SPORECRAWLER: 1,
     UnitTypeId.SPINECRAWLER: 1,
+    
+    # --- Special units ---
+    UnitTypeId.BUNKER: 0,
 }
 
 
 class UnitValidator(abc.ABC):
     """Abstract base for all validators."""
 
-    def __init__(self, unit_type):
+    def __init__(self, unit_type: UnitTypeId):
         self.unit_type = unit_type
         
     async def create(self, bot):
@@ -112,11 +114,14 @@ class WeaponValidator(UnitValidator):
 
         return True, actual != expected
 
-class VoidRayValidator(UnitValidator):
+class WeaponBuffValidator(UnitValidator):
     """VoidRay has extra bonus on Prismatic Alignment activation to expose weapon data."""
-
-    def __init__(self, unit_type):
+    def __init__(self, unit_type: UnitTypeId):
         super().__init__(unit_type)
+        self.configs = {
+            UnitTypeId.VOIDRAY: {"ability": AbilityId.EFFECT_VOIDRAYPRISMATICALIGNMENT, "buff": BuffId.VOIDRAYSWARMDAMAGEBOOST},
+            UnitTypeId.ORACLE: {"ability": AbilityId.BEHAVIOR_PULSARBEAMON, "buff": BuffId.ORACLEWEAPON},
+        }
         self.activated = False
         self.wait_steps = 0
         
@@ -135,9 +140,10 @@ class VoidRayValidator(UnitValidator):
 
         unit = units.first
         if not self.activated:
-            unit(AbilityId.EFFECT_VOIDRAYPRISMATICALIGNMENT)
+            ability = self.configs[self.unit_type]["ability"]
+            unit(ability)
             self.activated = True
-            print(f"✨ Activated Prismatic alignment on VoidRay ({unit.tag})")
+            print(f"✨ Activated {ability.name} on {self.unit_type.name} ({unit.tag})")
             return False, False
 
         self.wait_steps += 1
@@ -149,7 +155,7 @@ class VoidRayValidator(UnitValidator):
         expected = EXPECTED_WEAPONS.get(self.unit_type, 0)
         actual = len(weapons)
 
-        has_buff = BuffId.VOIDRAYSWARMDAMAGEBOOST in unit.buffs
+        has_buff = self.configs[self.unit_type]["buff"] in unit.buffs
         if actual == expected and has_buff:
             print(f"✅ {self.unit_type.name}: {actual}/{expected}/{has_buff} weapon(s), buffs {list(unit.buffs)}. OK after Pulsar Beam")
         else:
@@ -157,54 +163,7 @@ class VoidRayValidator(UnitValidator):
 
         return True, actual != expected and has_buff
 
-class OracleValidator(UnitValidator):
-    """Oracle requires Pulsar Beam activation to expose weapon data."""
-
-    def __init__(self, unit_type):
-        super().__init__(unit_type)
-        self.activated = False
-        self.wait_steps = 0
-        
-    async def create(self, bot):
-        spawn_data = [[self.unit_type, 1, bot.start_location, 1]]
-        await bot.client.debug_create_unit(spawn_data)
-
-    async def prepare(self, bot):
-        units = bot.all_units.of_type(self.unit_type)
-        return units
-
-    async def validate(self, bot):
-        units = bot.all_units.of_type(self.unit_type)
-        if not units:
-            return False, False
-
-        oracle = units.first
-        if not self.activated:
-            oracle(AbilityId.BEHAVIOR_PULSARBEAMON)
-            self.activated = True
-            print(f"✨ Activated Pulsar Beam on Oracle ({oracle.tag})")
-            return False, False
-
-        self.wait_steps += 1
-        if self.wait_steps < 5:
-            return False, False
-        
-        data = bot.game_data.units[self.unit_type.value]
-        weapons = data._proto.weapons
-        expected = EXPECTED_WEAPONS.get(self.unit_type, 0)
-        actual = len(weapons)
-            
-        has_buff = BuffId.ORACLEWEAPON in oracle.buffs
-        if actual == expected and has_buff:
-            print(f"✅ {self.unit_type.name}: {actual}/{expected}/{has_buff} weapon(s), buffs {list(oracle.buffs)}. OK after Pulsar Beam")
-        else:
-            print(f"❌ {self.unit_type.name}: {actual}/{expected} weapon(s), buffs {list(oracle.buffs)} missmatch ")
-
-        return True, actual != expected and has_buff
-
-
-# TODO: Still WIP
-# Possible problem when spawning units to put inside the bunker
+# Possible problem when spawning units to put inside the bunker and other validator tests
 class BunkerValidator(UnitValidator):
     """Validates bunker weapon scaling with various loaded units."""
 
@@ -215,7 +174,7 @@ class BunkerValidator(UnitValidator):
         UnitTypeId.GHOST,
     ]
 
-    def __init__(self, unit_type):
+    def __init__(self, unit_type: UnitTypeId):
         super().__init__(unit_type)
         self.configs = [
             (UnitTypeId.MARINE, 4),
@@ -224,10 +183,11 @@ class BunkerValidator(UnitValidator):
             (UnitTypeId.GHOST, 2),
         ]
         self.current_config = 0
-        self.current_load_idx = 0
-        self.wait_steps = 0
-        self.collected = []
+        self.current_load_idx = 1
+        self.wait_loading = False
+        self.found_buffs = set[BuffId]()
         self.bunker_tag = None
+        self.helper_tags = []
         self.helpers_spawned = False
         self.any_missmatch = False
         
@@ -262,50 +222,47 @@ class BunkerValidator(UnitValidator):
             return False, False
 
         if self.current_config >= len(self.configs):
-            print("🏁 Finished bunker validation.")
+            print(f"🏁 Finished bunker validation. Failed: {self.any_missmatch}")
             await self.cleanup(bot)
             return True, self.any_missmatch
 
         unit_type, load_counts = self.configs[self.current_config]
-        if self.current_load_idx >= load_counts:
-            damages = [d for _, d, _ in self.collected]
-            attacks = [a for n, _, a in self.collected]
-            expected_attacks = [n for n, _, _ in self.collected]
+        if self.current_load_idx > load_counts:
+            buffs = self.found_buffs
 
-            consistent_damage = len(set(damages)) == 1
-            attack_scaling = attacks == expected_attacks
-
-            if consistent_damage and attack_scaling:
-                print(f"✅ {unit_type.name} bunker scaling OK ({self.collected})")
+            if load_counts == len(buffs):
+                print(f"✅ {unit_type.name} bunker buffs OK: ({list(buffs)})")
             else:
-                print(f"❌ {unit_type.name} bunker scaling missmatch: {self.collected}")
+                print(f"❌ {unit_type.name} bunker buff missmatch: {len(buffs)}/{load_counts} {list(buffs)}")
                 self.any_missmatch = True
 
-            self.collected.clear()
+            self.found_buffs.clear()
             self.current_config += 1
-            self.current_load_idx = 0
+            self.current_load_idx = 1
             bunker(AbilityId.UNLOADALL_BUNKER)
             return False, False
 
-        helpers = bot.all_units.of_type(unit_type).take(load_counts)
-        if not helpers or len(helpers) < load_counts:
+        if not self.wait_loading:
+            self.wait_loading = True
+            helpers = bot.all_units.of_type(unit_type).take(self.current_load_idx)
+            self.helper_tags.clear()
+            for u in helpers:
+                self.helper_tags.append(u.tag)
+                bunker(AbilityId.LOAD_BUNKER, u)
             return False, False
+        else:
+            helper = bot.all_units.tags_in(self.helper_tags)
+            # The unit vanishes from the list when loaded into the bunker, so we wait
+            if helper:
+                return False, False
+                
+        if len(bunker.buffs) > 1:
+            print(f"❌ {unit_type.name} bunker buff missmatch: {len(bunker.buffs)}/1 {list(bunker.buffs)}")
+        self.found_buffs.update(bunker.buffs)
 
-        bunker(AbilityId.UNLOADALL_BUNKER)
-        for u in helpers:
-            bunker(AbilityId.LOAD_BUNKER, u)
-
-        self.wait_steps += 1
-        if self.wait_steps < 5:
-            return False, False
-
-        data = bot.game_data.units[bunker.type_id.value]
-        if data._proto.weapons:
-            weapon = data._proto.weapons[0]
-            self.collected.append((count, weapon.damage, weapon.attacks))
-
-        self.wait_steps = 0
+        self.wait_loading = False
         self.current_load_idx += 1
+        bunker(AbilityId.UNLOADALL_BUNKER)
         return False, False
 
     async def cleanup(self, bot):
@@ -318,8 +275,8 @@ class BunkerValidator(UnitValidator):
 class ValidatorManager:
     def __init__(self, bot):
         self.validators = {
-            UnitTypeId.VOIDRAY: VoidRayValidator,
-            UnitTypeId.ORACLE: OracleValidator,
+            UnitTypeId.VOIDRAY: WeaponBuffValidator,
+            UnitTypeId.ORACLE: WeaponBuffValidator,
             UnitTypeId.BUNKER: BunkerValidator,
         }
 
@@ -328,7 +285,7 @@ class ValidatorManager:
         return validator_cls(unit_type)
 
 class WeaponTestBot(BotAI):
-    def __init__(self, batch_size=10, validation_timeout=30):
+    def __init__(self, batch_size: int=10, validation_timeout: int=30):
         super().__init__()
         self.unit_types = list(EXPECTED_WEAPONS.keys())
         self.current_index = 0
@@ -346,7 +303,7 @@ class WeaponTestBot(BotAI):
 
         if not self.pending_units:
             if self.current_index >= len(self.unit_types):
-                print("\n✅ Weapon test completed.")
+                print(f"✅ Weapon test completed in {iteration} iterations.")
                 self.done = True
                 return
 
@@ -383,7 +340,7 @@ def main():
     parser = argparse.ArgumentParser(description="Check if SC2 units have weapons.")
     parser.add_argument("--map", type=str, required=True, help="Map name (e.g. Flat64)")
     parser.add_argument("--batch", type=int, default=10, help="Units per batch")
-    parser.add_argument("--timeout", type=int, default=30, help="Steps before giving up on spawn")
+    parser.add_argument("--timeout", type=int, default=300, help="Steps before giving up on spawn")
     args = parser.parse_args()
 
     bot = WeaponTestBot(batch_size=args.batch, validation_timeout=args.timeout)

@@ -4,4 +4,98 @@
 		<CombineArray value="IsNotLarva" />
 		<CombineArray value="IsLarva" />
 	</CValidatorCombine>
+    <CValidatorUnitType id="IsReaper">
+        <Value value="Reaper"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsGhost">
+        <Value value="Ghost"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NoMarineBuffValidator">
+        <Type value="And"/>
+        <CombineArray value="Has1MarineBuffValidator"/>
+        <CombineArray value="Has2MarineBuffValidator"/>
+        <CombineArray value="Has3MarineBuffValidator"/>
+        <CombineArray value="Has4MarineBuffValidator"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="Has1MarineBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has1MarineBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="Has2MarineBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has2MarineBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="Has3MarineBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has3MarineBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="Has4MarineBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has4MarineBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="NoMarauderBuffValidator">
+        <Type value="And"/>
+        <CombineArray value="Has1MarauderBuffValidator"/>
+        <CombineArray value="Has2MarauderBuffValidator"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="Has1MarauderBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has1MarauderBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="Has2MarauderBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has2MarauderBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="NoGhostBuffValidator">
+        <Type value="And"/>
+        <CombineArray value="Has1GhostBuffValidator"/>
+        <CombineArray value="Has2GhostBuffValidator"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="Has1GhostBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has1GhostBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="Has2GhostBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has2GhostBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="NoReaperBuffValidator">
+        <Type value="And"/>
+        <CombineArray value="Has1ReaperBuffValidator"/>
+        <CombineArray value="Has2ReaperBuffValidator"/>
+        <CombineArray value="Has3ReaperBuffValidator"/>
+        <CombineArray value="Has4ReaperBuffValidator"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="Has1ReaperBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has1ReaperBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="Has2ReaperBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has2ReaperBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="Has3ReaperBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has3ReaperBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="Has4ReaperBuffValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="Has4ReaperBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

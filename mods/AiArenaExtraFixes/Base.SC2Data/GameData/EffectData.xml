@@ -1,11 +1,289 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
     <CEffectDamage id="AiArenaVoidRayDamage">
-        <AttributeBonus index="Armored" value="4"/>
-        <Amount value="6"/>
+        <AttributeBonus index="Armored" value="4" />
+        <Amount value="6" />
     </CEffectDamage>
     <CEffectDamage id="AiArenaBanelingDamage">
-        <AttributeBonus index="Light" value="19"/>
-        <Amount value="16"/>
+        <AttributeBonus index="Light" value="19" />
+        <Amount value="16" />
     </CEffectDamage>
+    <CEffectApplyBehavior id="BunkerApply1MarineBuffEffect">
+        <Behavior value="Has1MarineBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply2MarineBuffEffect">
+        <Behavior value="Has2MarineBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply3MarineBuffEffect">
+        <Behavior value="Has3MarineBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply4MarineBuffEffect">
+        <Behavior value="Has4MarineBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply1MarauderBuffEffect">
+        <Behavior value="Has1MarauderBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply2MarauderBuffEffect">
+        <Behavior value="Has2MarauderBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply1GhostBuffEffect">
+        <Behavior value="Has1GhostBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply2GhostBuffEffect">
+        <Behavior value="Has2GhostBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply1ReaperBuffEffect">
+        <Behavior value="Has1ReaperBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply2ReaperBuffEffect">
+        <Behavior value="Has2ReaperBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply3ReaperBuffEffect">
+        <Behavior value="Has3ReaperBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerApply4ReaperBuffEffect">
+        <Behavior value="Has4ReaperBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BunkerLoadApplyGhostBuffEffect">
+        <Behavior value="BunkerLoadBuffGhost" />
+        <WhichUnit Value="Caster" />
+        <ValidatorArray value="IsGhost" />
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove1MarineBuffEffect">
+        <BehaviorLink value="Has1MarineBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove2MarineBuffEffect">
+        <BehaviorLink value="Has2MarineBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove3MarineBuffEffect">
+        <BehaviorLink value="Has3MarineBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove4MarineBuffEffect">
+        <BehaviorLink value="Has4MarineBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove1MarauderBuffEffect">
+        <BehaviorLink value="Has1MarauderBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove2MarauderBuffEffect">
+        <BehaviorLink value="Has2MarauderBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove1GhostBuffEffect">
+        <BehaviorLink value="Has1GhostBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove2GhostBuffEffect">
+        <BehaviorLink value="Has2GhostBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove1ReaperBuffEffect">
+        <BehaviorLink value="Has1ReaperBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove2ReaperBuffEffect">
+        <BehaviorLink value="Has2ReaperBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove3ReaperBuffEffect">
+        <BehaviorLink value="Has3ReaperBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="BunkerRemove4ReaperBuffEffect">
+        <BehaviorLink value="Has4ReaperBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectSet id="BunkerLoadSwitch1MarineBuffEffect">
+        <ValidatorArray value="IsMarine" />
+        <ValidatorArray value="NoMarineBuffValidator" />
+        <EffectArray value="BunkerApply1MarineBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch2MarineBuffEffect">
+        <ValidatorArray value="IsMarine" />
+        <ValidatorArray value="Has1MarineBuffValidator" />
+        <EffectArray value="BunkerApply2MarineBuffEffect" />
+        <EffectArray value="BunkerRemove1MarineBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch3MarineBuffEffect">
+        <ValidatorArray value="IsMarine" />
+        <ValidatorArray value="Has2MarineBuffValidator" />
+        <EffectArray value="BunkerApply3MarineBuffEffect" />
+        <EffectArray value="BunkerRemove2MarineBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch4MarineBuffEffect">
+        <ValidatorArray value="IsMarine" />
+        <ValidatorArray value="Has3MarineBuffValidator" />
+        <EffectArray value="BunkerApply4MarineBuffEffect" />
+        <EffectArray value="BunkerRemove3MarineBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch1MarineBuffEffect">
+        <ValidatorArray value="IsMarine" />
+        <ValidatorArray value="Has1MarineBuffValidator" />
+        <EffectArray value="BunkerRemove1MarineBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch2MarineBuffEffect">
+        <ValidatorArray value="IsMarine" />
+        <ValidatorArray value="Has2MarineBuffValidator" />
+        <EffectArray value="BunkerRemove2MarineBuffEffect" />
+        <EffectArray value="BunkerApply1MarineBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch3MarineBuffEffect">
+        <ValidatorArray value="IsMarine" />
+        <ValidatorArray value="Has3MarineBuffValidator" />
+        <EffectArray value="BunkerRemove3MarineBuffEffect" />
+        <EffectArray value="BunkerApply2MarineBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch4MarineBuffEffect">
+        <ValidatorArray value="IsMarine" />
+        <ValidatorArray value="Has4MarineBuffValidator" />
+        <EffectArray value="BunkerRemove4MarineBuffEffect" />
+        <EffectArray value="BunkerApply3MarineBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch1MarauderBuffEffect">
+        <ValidatorArray value="IsMarauder" />
+        <ValidatorArray value="NoMarauderBuffValidator" />
+        <EffectArray value="BunkerApply1MarauderBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch2MarauderBuffEffect">
+        <ValidatorArray value="IsMarauder" />
+        <ValidatorArray value="Has1MarauderBuffValidator" />
+        <EffectArray value="BunkerApply2MarauderBuffEffect" />
+        <EffectArray value="BunkerRemove1MarauderBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch1MarauderBuffEffect">
+        <ValidatorArray value="IsMarauder" />
+        <ValidatorArray value="Has1MarauderBuffValidator" />
+        <EffectArray value="BunkerRemove1MarauderBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch2MarauderBuffEffect">
+        <ValidatorArray value="IsMarauder" />
+        <ValidatorArray value="Has2MarauderBuffValidator" />
+        <EffectArray value="BunkerRemove2MarauderBuffEffect" />
+        <EffectArray value="BunkerApply1MarauderBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch1GhostBuffEffect">
+        <ValidatorArray value="IsGhost" />
+        <ValidatorArray value="NoGhostBuffValidator" />
+        <EffectArray value="BunkerApply1GhostBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch2GhostBuffEffect">
+        <ValidatorArray value="IsGhost" />
+        <ValidatorArray value="Has1GhostBuffValidator" />
+        <EffectArray value="BunkerApply2GhostBuffEffect" />
+        <EffectArray value="BunkerRemove1GhostBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch1GhostBuffEffect">
+        <ValidatorArray value="IsGhost" />
+        <ValidatorArray value="Has1GhostBuffValidator" />
+        <EffectArray value="BunkerRemove1GhostBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch2GhostBuffEffect">
+        <ValidatorArray value="IsGhost" />
+        <ValidatorArray value="Has2GhostBuffValidator" />
+        <EffectArray value="BunkerRemove2GhostBuffEffect" />
+        <EffectArray value="BunkerApply1GhostBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch1ReaperBuffEffect">
+        <ValidatorArray value="IsReaper" />
+        <ValidatorArray value="NoReaperBuffValidator" />
+        <EffectArray value="BunkerApply1ReaperBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch2ReaperBuffEffect">
+        <ValidatorArray value="IsReaper" />
+        <ValidatorArray value="Has1ReaperBuffValidator" />
+        <EffectArray value="BunkerApply2ReaperBuffEffect" />
+        <EffectArray value="BunkerRemove1ReaperBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch3ReaperBuffEffect">
+        <ValidatorArray value="IsReaper" />
+        <ValidatorArray value="Has2ReaperBuffValidator" />
+        <EffectArray value="BunkerApply3ReaperBuffEffect" />
+        <EffectArray value="BunkerRemove2ReaperBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadSwitch4ReaperBuffEffect">
+        <ValidatorArray value="IsReaper" />
+        <ValidatorArray value="Has3ReaperBuffValidator" />
+        <EffectArray value="BunkerApply4ReaperBuffEffect" />
+        <EffectArray value="BunkerRemove3ReaperBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch1ReaperBuffEffect">
+        <ValidatorArray value="IsReaper" />
+        <ValidatorArray value="Has1ReaperBuffValidator" />
+        <EffectArray value="BunkerRemove1ReaperBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch2ReaperBuffEffect">
+        <ValidatorArray value="IsReaper" />
+        <ValidatorArray value="Has2ReaperBuffValidator" />
+        <EffectArray value="BunkerRemove2ReaperBuffEffect" />
+        <EffectArray value="BunkerApply1ReaperBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch3ReaperBuffEffect">
+        <ValidatorArray value="IsReaper" />
+        <ValidatorArray value="Has3ReaperBuffValidator" />
+        <EffectArray value="BunkerRemove3ReaperBuffEffect" />
+        <EffectArray value="BunkerApply2ReaperBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadSwitch4ReaperBuffEffect">
+        <ValidatorArray value="IsReaper" />
+        <ValidatorArray value="Has4ReaperBuffValidator" />
+        <EffectArray value="BunkerRemove4ReaperBuffEffect" />
+        <EffectArray value="BunkerApply3ReaperBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadApplyBuffEffect">
+        <EffectArray value="BunkerLoadApplyBuffEffectP1"/>
+        <EffectArray value="BunkerLoadApplyBuffEffectP2"/>
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadApplyBuffEffectP1">
+        <EffectArray value="BunkerLoadSwitch4MarineBuffEffect"/>
+        <EffectArray value="BunkerLoadSwitch3MarineBuffEffect"/>
+        <EffectArray value="BunkerLoadSwitch2MarineBuffEffect"/>
+        <EffectArray value="BunkerLoadSwitch1MarineBuffEffect" />
+        <EffectArray value="BunkerLoadSwitch2MarauderBuffEffect" />
+        <EffectArray value="BunkerLoadSwitch1MarauderBuffEffect" />
+        <EffectArray value="BunkerLoadSwitch2GhostBuffEffect" />
+        <EffectArray value="BunkerLoadSwitch1GhostBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerLoadApplyBuffEffectP2">
+        <EffectArray value="BunkerLoadSwitch4ReaperBuffEffect"/>
+        <EffectArray value="BunkerLoadSwitch3ReaperBuffEffect"/>
+        <EffectArray value="BunkerLoadSwitch2ReaperBuffEffect"/>
+        <EffectArray value="BunkerLoadSwitch1ReaperBuffEffect" />
+        <EffectArray value="BunkerLoadApplyGhostBuffEffect" />
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadRemoveBuffEffect">
+        <EffectArray value="BunkerUnloadRemoveBuffEffectP1" />
+        <EffectArray value="BunkerUnloadRemoveBuffEffectP2"/>
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadRemoveBuffEffectP1">
+        <EffectArray value="BunkerUnloadSwitch1MarineBuffEffect" />
+        <EffectArray value="BunkerUnloadSwitch2MarineBuffEffect"/>
+        <EffectArray value="BunkerUnloadSwitch3MarineBuffEffect"/>
+        <EffectArray value="BunkerUnloadSwitch4MarineBuffEffect"/>
+        <EffectArray value="BunkerUnloadSwitch1MarauderBuffEffect"/>
+        <EffectArray value="BunkerUnloadSwitch2MarauderBuffEffect"/>
+        <EffectArray value="BunkerUnloadSwitch1GhostBuffEffect"/>
+        <EffectArray value="BunkerUnloadSwitch2GhostBuffEffect"/>
+    </CEffectSet>
+    <CEffectSet id="BunkerUnloadRemoveBuffEffectP2">
+        <EffectArray value="BunkerUnloadSwitch1ReaperBuffEffect" />
+        <EffectArray value="BunkerUnloadSwitch2ReaperBuffEffect"/>
+        <EffectArray value="BunkerUnloadSwitch3ReaperBuffEffect"/>
+        <EffectArray value="BunkerUnloadSwitch4ReaperBuffEffect"/>
+    </CEffectSet>
 </Catalog>

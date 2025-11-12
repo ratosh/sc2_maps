@@ -6,7 +6,6 @@
 	</CUnit>
     <CUnit id="VoidRay">
         <WeaponArray Link="AiArenaVoidRayNormal"/>
-        <WeaponArray Link="AiArenaVoidRayBoosted"/>
 	</CUnit>
     <CUnit id="Oracle">
         <WeaponArray index="1" Link="AiArenaOracleDisplayDummy"/>

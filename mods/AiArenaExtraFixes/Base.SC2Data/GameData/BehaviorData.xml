@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-	<CBehaviorBuff id="VoidRaySwarmDamageBoost">
-		<Modification>
-            <WeaponEnableArray value="AiArenaVoidRayBoosted"/>
-            <WeaponDisableArray value="AiArenaVoidRayNormal"/>
-		</Modification>
+	<CBehaviorBuff id="Has1MarineBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has2MarineBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has3MarineBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has4MarineBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has1MarauderBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has2MarauderBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has1GhostBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has2GhostBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has1ReaperBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has2ReaperBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has3ReaperBuff">
+		<InfoFlags index="Hidden" value="0" />
+	</CBehaviorBuff>
+	<CBehaviorBuff id="Has4ReaperBuff">
+		<InfoFlags index="Hidden" value="0" />
 	</CBehaviorBuff>
 </Catalog>
