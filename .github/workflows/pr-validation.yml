@@ -42,7 +42,7 @@ jobs:
           echo "✅ Map built:"
           ls -lh Output/
       - name: Pull SC2 Docker image
-        run: docker pull stephanzlatarev/starcraft:latest
+        run: docker pull aiarena/arenaclient:latest
       - name: Run weapon check bot
         run: |
           MAP="${{ matrix.map }}"
@@ -50,7 +50,7 @@ jobs:
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
             -v "${{ github.workspace }}/Output:/root/StarCraftII/Maps" \
-            stephanzlatarev/starcraft:latest \
+            aiarena/arenaclient:latest \
             /bin/bash -c "
               cd /workspace && \
               python game_check/weapon_check_bot.py --map $MAP; \
