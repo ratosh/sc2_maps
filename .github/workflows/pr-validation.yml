@@ -42,7 +42,7 @@ jobs:
           echo "✅ Map built:"
           ls -lh Output/
       - name: Pull SC2 Docker image
-        run: docker pull cpp-sc2/docker-sc2:latest
+        run: docker pull stephanzlatarev/starcraft:latest
       - name: Run weapon check bot
         run: |
           MAP="${{ matrix.map }}"
