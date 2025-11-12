@@ -315,6 +315,14 @@ class BuffId(enum.Enum):
     DUMMYBUFF003 = 305
     DUMMYBUFF004 = 306
     DUMMYBUFF005 = 307
+    DUMMYBUFF006 = 308
+    DUMMYBUFF007 = 309
+    DUMMYBUFF008 = 310
+    DUMMYBUFF009 = 311
+    DUMMYBUFF010 = 312
+    DUMMYBUFF011 = 313
+    DUMMYBUFF012 = 314
+    DUMMYBUFF013 = 315
 
     def __repr__(self) -> str:
         return f"BuffId.{self.name}"

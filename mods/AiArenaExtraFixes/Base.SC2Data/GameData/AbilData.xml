@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+	<CAbilTransport id="BunkerTransport">
+		<LoadCargoEffect value="BunkerLoadApplyBuffEffect" />
+		<UnloadCargoEffect value="BunkerUnloadRemoveBuffEffect" />
+	</CAbilTransport>
+</Catalog>

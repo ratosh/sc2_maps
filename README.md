@@ -3,19 +3,22 @@
 Embedding mods files into a SC2 map, can be changed to support more mods but for this repo always having 2 is the desired behavior.
 
 ## Fixes
-Intended to solve issues when making new sc2 maps to be compatible with 4.10 version.
+Intended to solve problems when making new sc2 maps to be compatible with 4.10 version.
+
+Covered problems:
+* Missing weapons details
 
 ### Weapons
-The protobuff API is designed for weapons to be shared inside unit type data, so we can't change weapons based on current state of a unit.
 
-To overcome this issue we add buffs to units giving more information. Here is a list of special weapons:
-* Void ray: Has the basic weapon defined and a buff telling if void ray prismatic alignment is active, but we can't tell what is different on that weapon.
+Due to changes on 5.x.x patches, some weapons are not available on the API. We add them as visual effects or buffs that should not affect the gameplay.
+There is also an issue with units that change weapon behavior without changing unit type (VoidRay, Oracle and Bunkers). We can't just add the weapon as the Protobuff protocol is designed with weapon info shared on unit type data, so we can't change weapon information based on current state of a specific unit. 
+
+Current solution to this issue is to add visual buffs to units giving more information. Here is how we add this information:
+* Void ray: Has the basic weapon defined and a buff telling if void ray prismatic alignment is active. Bots should integrate the weapon and add a bonus damage when the buff is active.
 * Oracle: Has the basic weapon and a buff telling that weapon is active. Bots should integrate that the weapon is only active when the buff is active.
-* Bunker: No weapons but has buffs to specify the amount of units inside. Bots should integrate the weapon from the units.
+* Bunker: No weapons but has buffs to specify the amount of units inside. Bots should integrate the weapon, changing the attack amount based on the amount of units.
 
-We can discuss better solutions.
-
-## How to use
+## How to create a map
 
 Using build_sc2map.py the script to merge folders and pack the map
 
@@ -36,3 +39,15 @@ Usage:
 ```sh
 python game_check\weapon_check_bot.py --map PylonAIE_5_0_14 --batch 5 --timeout 30
 ```
+
+## Extracting patch
+
+This can be done with a Ladik's Casc Viewer. You can extract the patch changes from a game version.
+Content inside mods\voidmulti.sc2mod is current game version patch
+
+## Extracting stableid
+
+This can be done by making a bot play a map on a windows machine. The stable.json file should be refreshed under %USERPROFILE%\Documents\StarCraft II folder.
+This file then needs to be placed under the game patch folder.
+
+NOTE: Our custom buffs need to be included on that stable.json file too.
