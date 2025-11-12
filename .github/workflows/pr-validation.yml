@@ -50,13 +50,13 @@ jobs:
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
             -v "${{ github.workspace }}/Output:/root/StarCraftII/Maps" \
+            --entrypoint python \
             aiarena/arenaclient:latest \
-            /bin/bash -c "
-              cd /workspace && \
-              python game_check/weapon_check_bot.py --map $MAP; \
-              RET=\$?; \
-              if [ \$RET -ne 0 ]; then
-                echo '❌ Validation failed for' $MAP
-                exit 1
-              fi
-            "
+            /workspace/game_check/weapon_check_bot.py --map "$MAP"
+          RET=$?
+          if [ $RET -ne 0 ]; then
+            echo "❌ Validation failed for $MAP (exit code $RET)"
+            exit 1
+          else
+            echo "✅ Validation succeeded for $MAP"
+          fi
