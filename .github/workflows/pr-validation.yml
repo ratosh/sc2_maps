@@ -50,7 +50,7 @@ jobs:
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
             -v "${{ github.workspace }}/Output:/root/StarCraftII/Maps" \
-            cpp-sc2/docker-sc2:latest \
+            stephanzlatarev/starcraft:latest \
             /bin/bash -c "
               cd /workspace && \
               python game_check/weapon_check_bot.py --map $MAP; \
