@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="LightOmniBlue"/>
+<Actor id="LightOmniBlueLarge"/>
+<Actor id="LightOmniRedLarge"/>
+<Actor id="Nanocloud_Currents_Glow" Variations="0,2,3"/>
+<Actor id="Aiur_PowerCrystal"/>
+<Actor id="City_Plane_Background"/>
+<Actor id="DOM_Table_WarRoom" Variations="2"/>
+<Actor id="DecalSpace" Variations="0"/>
+<Actor id="GenericSpacePipes" Variations="12"/>
+<Actor id="JarbanMinor_SandDrifts" Variations="0,1,2,3"/>
+<Actor id="JarbanMinor_Small_Rock_Group" Variations="0,1,2,3"/>
+<Actor id="KorhalBridge"/>
+<Actor id="MilitaryFenceDiagonalShort" Variations="1"/>
+<Actor id="SpacePlatform_Lantern_Blue_Blink" Variations="0"/>
+<Actor id="SpacePlatform_Lantern_Red_Blink" Variations="0"/>
+<Actor id="TIMAppendix"/>
+<Actor id="Tarsonis_GroundTrims" Variations="2"/>
+<Actor id="Tarsonis_Ramp_Stairs" Variations="0,2"/>
+<Actor id="Terran_Industrial_Garage" Variations="3"/>
+<Actor id="TheVoid_RubblePile" Variations="0,3"/>
+<Actor id="UmojanLabCrates" Variations="0,1,3,4"/>
+<Actor id="UmojanLabWallConsoles" Variations="0,1,2"/>
+<Actor id="Vespene_Crack"/>
+<Actor id="Vespene_Pump_Small"/>
+<Actor id="Void_CliffRocks_Edge" Variations="0,1,2,3"/>
+<Actor id="Void_Hole"/>
+<Actor id="Void_Nebula_Storm"/>
+<Actor id="WindEnergyDust"/>
+<Actor id="XelNaga_Base_Decals" Variations="5"/>
+<Actor id="BraxisAlphaTallSign"/>
+<Actor id="CrystalHuge" Variations="0,1,2,3"/>
+<Actor id="CrystalLarge" Variations="0,1"/>
+<Actor id="ForceFieldWall"/>
+<Actor id="MarSaraCrack" Variations="1"/>
+<Actor id="Logo_LeaguePrimary"/>
+<Actor id="Logo_LeagueSecondary"/>
+<Actor id="Logo_PlayerPrimary"/>
+<Actor id="Logo_PlayerSecondary"/>
+<Terrain id="RedstoneEx1"/>
+<Unit id="XelNagaTower"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,8,9"/>
+<Unit id="MineralField750" Variations="2,4,5,6,7,8"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="SpacePlatformGeyser"/>
+<Unit id="UnbuildablePlatesDestructible" Variations="2"/>
+<Unit id="CollapsibleTerranTowerDiagonal"/>
+<Unit id="CleaningBot"/>
+<Unit id="DestructibleCityDebris6x6"/>
+<Unit id="DestructibleCityDebrisHugeDiagonalULBR"/>
+<Unit id="LabBot"/>
+<Unit id="LabMineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Unit id="LabMineralField750" Variations="0,1,2,3,4,5,6,8,9"/>
+</Preload>
