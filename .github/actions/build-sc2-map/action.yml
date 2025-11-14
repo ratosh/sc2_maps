@@ -24,7 +24,7 @@ runs:
         MAP="${{ inputs.map }}"
         BASE="${MAP%%_*}"
         echo "Building map $MAP from $BASE"
-        python build_sc2map.py "$BASE" mods/Patch_5_0_14 mods/AiArenaExtraFixes "Output/$MAP"
+        python build_sc2map.py maps/"$BASE" mods/Patch_5_0_14 mods/AiArenaExtraFixes "Output/$MAP"
         echo "output_path=Output/$MAP.SC2Map" >> "$GITHUB_OUTPUT"
       shell: bash
 
