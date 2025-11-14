@@ -22,14 +22,12 @@ jobs:
           - LeyLinesAIE_5_0_14
           - TorchesAIE_5_0_14
           - PersephoneAIE_5_0_14
+    uses: ./.github/workflows/shared-build-map.yaml
+    with:
+      map: ${{ matrix.map }}
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: 🔄 Build SC2 Map (Reusable Workflow)
-        uses: ./.github/workflows/shared-build-map.yaml
-        with:
-          map: ${{ matrix.map }}
 
       - name: 📤 Upload SC2Map Artifact
         uses: actions/upload-artifact@v4
