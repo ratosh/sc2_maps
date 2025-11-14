@@ -30,6 +30,7 @@ jobs:
         uses: ./.github/actions/build-sc2-map
         with:
           map: ${{ matrix.map }}
+          
       - name: 🔍 Verify SC2 map file
         run: |
           FILE_PATH="${{ steps.build_map.outputs.output_path }}"

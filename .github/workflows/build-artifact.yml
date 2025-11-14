@@ -27,7 +27,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: 🔄 Build SC2 Map
-        uses: ./.github/actions/shared-build-map
+        id: build_map
+        uses: ./.github/actions/build-sc2-map
         with:
           map: ${{ matrix.map }}
 
