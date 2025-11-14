@@ -15,11 +15,11 @@ jobs:
       matrix:
         map:
           - PylonAIE_5_0_14
-          # - MagannathaAIE_5_0_14
-          # - UltraloveAIE_5_0_14
-          # - LeyLinesAIE_5_0_14
-          # - TorchesAIE_5_0_14
-          # - PersephoneAIE_5_0_14
+          - MagannathaAIE_5_0_14
+          - UltraloveAIE_5_0_14
+          - LeyLinesAIE_5_0_14
+          - TorchesAIE_5_0_14
+          - PersephoneAIE_5_0_14
     name: Build & Test ${{ matrix.map }}
 
     steps:
