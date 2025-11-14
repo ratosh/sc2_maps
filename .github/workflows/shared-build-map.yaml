@@ -6,7 +6,6 @@ on:
       map:
         required: true
         type: string
-    secrets: {}
     outputs:
       output_path:
         description: "Where the built map was written"
