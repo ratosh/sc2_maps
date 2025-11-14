@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="Aiur_GroundCover" Variations="0,1,2,3"/>
+<Actor id="Aiur_Overgrowth" Variations="0,1,2,3,4,5"/>
+<Actor id="Aiur_Trees_Giant" Variations="0,1"/>
+<Actor id="Aiur_Trees_Log" Variations="0,1"/>
+<Actor id="Aiur_Trees_Log_Small" Variations="0,2,3"/>
+<Actor id="Aiur_Trees_Regular" Variations="2,3,4,6,7,10,11,12,13"/>
+<Actor id="Aiur_Trees_Regular_Grouped" Variations="0,2,3,4,5"/>
+<Actor id="Aiur_Trees_Tall" Variations="1,3,4,5,6,7,8,10,11"/>
+<Actor id="BattleStation_Line_Decals" Variations="17,21"/>
+<Actor id="Blast_Craters_Big" Variations="0,2,4"/>
+<Actor id="BrokenRocksSmall" Variations="0,1,2,4,5"/>
+<Actor id="CompoundSewers_ExhaustPipes" Variations="3"/>
+<Actor id="DOM_Crate" Variations="0,1,2,3,4"/>
+<Actor id="DecalSpace" Variations="9"/>
+<Actor id="Elsecaro_Foliage" Variations="16"/>
+<Actor id="Fog_Shakuras"/>
+<Actor id="GenericSpacePipes" Variations="0,8"/>
+<Actor id="GenericSpacePipesDiagonal" Variations="2"/>
+<Actor id="JarbanMinor_Antenne" Variations="1"/>
+<Actor id="JarbanMinor_Blast_Craters_Big" Variations="0,1,4"/>
+<Actor id="JarbanMinor_TreeStump"/>
+<Actor id="PortCity_Trims" Variations="4,14,15,18"/>
+<Actor id="SOA_Beam"/>
+<Actor id="Shadow_Asteroids" Variations="0,1,2"/>
+<Actor id="SnowRefinery_Terran_Pipes" Variations="4,6"/>
+<Actor id="SnowRefinery_Terran_WireConduits" Variations="1,2,3,4,5,6,7,8,9"/>
+<Actor id="Tarsonis_GroundTrims" Variations="9"/>
+<Actor id="TheVoid_RubblePile" Variations="0,1,2,3"/>
+<Actor id="UmojanLabWeaponCase" Variations="1"/>
+<Actor id="Void_CliffRocks_Rubble" Variations="0,1,2"/>
+<Actor id="Void_CrackSplat" Variations="0,1,2,3,4,5"/>
+<Actor id="Void_SmallRocks" Variations="0"/>
+<Actor id="ZerusCliffVines" Variations="0"/>
+<Actor id="ZerusGroundVines" Variations="1"/>
+<Actor id="TerranCliffGapFiller" Variations="0,2"/>
+<Actor id="InvisibleCurtain"/>
+<Actor id="KorhalCurtain" Variations="2"/>
+<Actor id="LavaSplash"/>
+<Actor id="PlantsJungle" Variations="18,21,22"/>
+<Actor id="MonlythCurtain" Variations="0,2,3"/>
+<Actor id="Logo_LeaguePrimary"/>
+<Actor id="Logo_LeagueSecondary"/>
+<Actor id="Logo_PlayerPrimary"/>
+<Actor id="Logo_PlayerSecondary"/>
+<Terrain id="HybridLabXelNaga"/>
+<Unit id="RichVespeneGeyser"/>
+<Unit id="MineralField" Variations="1,2,3,4,6,7,8,9"/>
+<Unit id="MineralField750" Variations="0,2,3,4,5,6,7,8"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="SpacePlatformGeyser"/>
+<Unit id="UnbuildablePlatesDestructible" Variations="5"/>
+<Unit id="DestructibleRockEx16x6"/>
+<Unit id="LabMineralField" Variations="2,4,5,7"/>
+<Unit id="LabMineralField750" Variations="3,6,9"/>
+<Unit id="BattleStationMineralField750" Variations="2,4"/>
+</Preload>

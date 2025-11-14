@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TriggerData>
+    <Root>
+        <Item Type="Trigger" Id="E7846712"/>
+    </Root>
+    <Element Type="Trigger" Id="E7846712">
+        <Identifier>MeleeInitialization</Identifier>
+        <Event Type="FunctionCall" Id="3282E813"/>
+        <Action Type="FunctionCall" Id="8CDFAB1F"/>
+        <Action Type="FunctionCall" Id="3C75F6B3"/>
+        <Action Type="FunctionCall" Id="DB463E77"/>
+        <Action Type="FunctionCall" Id="08D565A8"/>
+    </Element>
+    <Element Type="FunctionCall" Id="3282E813">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000120"/>
+    </Element>
+    <Element Type="FunctionCall" Id="8CDFAB1F">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000143"/>
+    </Element>
+    <Element Type="FunctionCall" Id="3C75F6B3">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000145"/>
+    </Element>
+    <Element Type="FunctionCall" Id="DB463E77">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000150"/>
+    </Element>
+    <Element Type="FunctionCall" Id="08D565A8">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000148"/>
+    </Element>
+</TriggerData>

@@ -1,13 +1,18 @@
 # sc2_maps
 
-Embedding mods files into a SC2 map, can be changed to support more mods but for this repo always having 2 is the desired behavior.
+Intended to solve problems when making new sc2 maps to be compatible with 4.10 version.
+
+This repo contains:
+
+* Script to embed files SC2 maps (can be changed to support more mods but for this repo always having 2 is the desired behavior)
+* Fixes to known problems when converting maps
+* Validation bot to confirm problems are solved
 
 ## Fixes
-Intended to solve problems when making new sc2 maps to be compatible with 4.10 version.
 
 Covered problems:
 * Missing weapons details
-
+ 
 ### Weapons
 
 Due to changes on 5.x.x patches, some weapons are not available on the API. We add them as visual effects or buffs that should not affect the gameplay.
@@ -16,7 +21,7 @@ There is also an issue with units that change weapon behavior without changing u
 Current solution to this issue is to add visual buffs to units giving more information. Here is how we add this information:
 * Void ray: Has the basic weapon defined and a buff telling if void ray prismatic alignment is active. Bots should integrate the weapon and add a bonus damage when the buff is active.
 * Oracle: Has the basic weapon and a buff telling that weapon is active. Bots should integrate that the weapon is only active when the buff is active.
-* Bunker: No weapons but has buffs to specify the amount of units inside. Bots should integrate the weapon, changing the attack amount based on the amount of units.
+* Bunker: No weapons but has buffs to specify the amount of units inside. Bots should copy the weapon from units and changing the attack amount based on the amount of units.
 
 ## How to create a map
 
@@ -42,7 +47,9 @@ python game_check\weapon_check_bot.py --map PylonAIE_5_0_14 --batch 5 --timeout 
 
 ## Extracting patch
 
-This can be done with a Ladik's Casc Viewer. You can extract the patch changes from a game version.
+You can extract the current patch changes using Ladik's Casc Viewer.
+Different patch versions can also be found on github: https://github.com/Ahli/sc2xml
+
 Content inside mods\voidmulti.sc2mod is current game version patch
 
 ## Extracting stableid
@@ -51,3 +58,7 @@ This can be done by making a bot play a map on a windows machine. The stable.jso
 This file then needs to be placed under the game patch folder.
 
 NOTE: Our custom buffs need to be included on that stable.json file too.
+
+## TODO
+
+* Check terrain version (t3Terrain.xmml files), it needs to be 114;

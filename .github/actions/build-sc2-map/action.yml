@@ -1,0 +1,39 @@
+name: "Build SC2 Map"
+description: "Build SC2 map using Python"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      shell: bash
+
+    - name: Build SC2 Map
+      id: build_map
+      run: |
+        mkdir -p Output
+        MAP="${{ inputs.map }}"
+        BASE="${MAP%%_*}"
+        echo "Building map $MAP from $BASE"
+        python build_sc2map.py maps/"$BASE" mods/Patch_5_0_14 mods/AiArenaExtraFixes "Output/$MAP"
+        echo "output_path=Output/$MAP.SC2Map" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+inputs:
+  map:
+    description: "Name of the SC2 map to build"
+    required: true
+
+outputs:
+  output_path:
+    description: "Where the built map was written"
+    value: ${{ steps.build_map.outputs.output_path }}
