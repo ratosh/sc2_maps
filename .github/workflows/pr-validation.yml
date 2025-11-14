@@ -50,13 +50,12 @@ jobs:
       - name: 🧪 Run weapon check bot
         run: |
           MAP="${{ matrix.map }}"
-          MAP_FILE="${{ matrix.map }}.SC2Map"
-          MAP_PATH="$(realpath "${{ steps.build_map.outputs.output_path }}")"
+          MAP_PATH="$(dirname "${{ steps.build_map.outputs.output_path }}")"
           echo "MAP_PATH $MAP_PATH"
           echo "MAP $MAP"
           CMD="docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
-            -v "$MAP_PATH:/root/StarCraftII/Maps/$MAP_FILE" \
+            -v "$MAP_PATH:/root/StarCraftII/Maps/" \
             --entrypoint python \
             aiarena/arenaclient:latest \
             /workspace/game_check/weapon_check_bot.py --map "$MAP""
