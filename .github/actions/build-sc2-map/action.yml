@@ -1,10 +1,10 @@
 name: "Build SC2 Map"
 description: "Build SC2 map using Python"
+
 runs:
   using: "composite"
   steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -15,15 +15,18 @@ runs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+      shell: bash
 
     - name: Build SC2 Map
-      shell: bash
+      id: build_map
       run: |
         mkdir -p Output
-        BASE="maps/${{ inputs.map%%_* }}"
-        echo "Building map ${{ inputs.map }} from $BASE"
-        python build_sc2map.py "$BASE" mods/Patch_5_0_14 mods/AiArenaExtraFixes "Output/${{ inputs.map}}"
-      id: build_map
+        MAP="${{ inputs.map }}"
+        BASE="${MAP%%_*}"
+        echo "Building map $MAP from $BASE"
+        python build_sc2map.py "$BASE" mods/Patch_5_0_14 mods/AiArenaExtraFixes "Output/$MAP"
+        echo "output_path=Output/$MAP" >> "$GITHUB_OUTPUT"
+      shell: bash
 
 inputs:
   map:
