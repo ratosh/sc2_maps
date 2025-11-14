@@ -50,7 +50,7 @@ jobs:
       - name: 🧪 Run weapon check bot
         run: |
           MAP="${{ matrix.map }}"
-          MAP_PATH="$(dirname "${{ steps.build_map.outputs.output_path }}")"
+          MAP_PATH="$(realpath "$(dirname "${{ steps.build_map.outputs.output_path }}")")"
           echo "MAP_PATH $MAP_PATH"
           echo "MAP $MAP"
           CMD="docker run --rm \
