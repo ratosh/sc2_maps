@@ -3,10 +3,10 @@ name: PR Validation – SC2 Bot
 on:
   pull_request:
     paths:
-      - 'game_check/**'
-      - 'weapon_check_bot.py'
-      - 'build_sc2map.py'
-      - '.github/workflows/pr-validation.yml'
+      - "game_check/**"
+      - "weapon_check_bot.py"
+      - "build_sc2map.py"
+      - ".github/workflows/pr-validation.yml"
 
 jobs:
   build_and_test:
@@ -49,16 +49,23 @@ jobs:
 
       - name: 🧪 Run weapon check bot
         run: |
-
           MAP="${{ matrix.map }}"
           MAP_FILE="${{ matrix.map }}.SC2Map"
           MAP_PATH="$(realpath "${{ steps.build_map.outputs.output_path }}")"
-          docker run --rm \
+          echo "MAP_PATH $MAP_PATH"
+          echo "MAP $MAP"
+          CMD="docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
             -v "$MAP_PATH:/root/StarCraftII/Maps/$MAP_FILE" \
             --entrypoint python \
             aiarena/arenaclient:latest \
-            /workspace/game_check/weapon_check_bot.py --map "$MAP"
+            /workspace/game_check/weapon_check_bot.py --map "$MAP""
+            
+          echo "========== DOCKER RUN COMMAND =========="
+          echo "$CMD"
+          echo "========================================"
+
+          eval $CMD
           RET=$?
           if [ $RET -ne 0 ]; then
             echo "❌ Validation failed for $MAP"
