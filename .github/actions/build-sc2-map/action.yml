@@ -24,8 +24,21 @@ runs:
         MAP="${{ inputs.map }}"
         BASE="${MAP%%_*}"
         echo "Building map $MAP from $BASE"
+
+        # Run the map builder
         python build_sc2map.py "$BASE" mods/Patch_5_0_14 mods/AiArenaExtraFixes "Output/$MAP"
-        echo "output_path=Output/$MAP" >> "$GITHUB_OUTPUT"
+
+        # Pick only the .SC2Map file for output
+        SC2MAP_FILE=$(find Output -maxdepth 1 -type f -name "$MAP.SC2Map" | head -n1)
+
+        if [ -z "$SC2MAP_FILE" ]; then
+          echo "❌ Error: SC2Map file not found for $MAP"
+          exit 1
+        fi
+
+        # Export the path as the action output
+        echo "output_path=$SC2MAP_FILE" >> "$GITHUB_OUTPUT"
+        echo "✅ Built SC2 map: $SC2MAP_FILE"
       shell: bash
 
 inputs:
@@ -35,5 +48,5 @@ inputs:
 
 outputs:
   output_path:
-    description: "Where the built map was written"
+    description: "Path to the .SC2Map file"
     value: ${{ steps.build_map.outputs.output_path }}
