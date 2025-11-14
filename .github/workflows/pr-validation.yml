@@ -44,6 +44,12 @@ jobs:
           fi
         shell: bash
 
+      - name: 📤 Upload built map (for debugging / download)
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-map-${{ matrix.map }}
+          path: ${{ steps.build_map.outputs.output_path }}
+
       - name: 🐳 Pull SC2 Docker image
         run: docker pull aiarena/arenaclient:latest
 
