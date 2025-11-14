@@ -35,4 +35,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.map }}
-          path: Output/${{ matrix.map }}.SC2Map
+          path: ${{ steps.build_map.outputs.output_path }}

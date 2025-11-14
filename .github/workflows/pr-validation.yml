@@ -40,7 +40,7 @@ jobs:
           MAP_FILE="${{ matrix.map }}.SC2Map"
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
-            -v "${{ steps.build_map.outputs.output_path }}/Output:/root/StarCraftII/Maps/$MAP_FILE" \
+            -v "${{ steps.build_map.outputs.output_path }}:/root/StarCraftII/Maps/$MAP_FILE" \
             --entrypoint python \
             aiarena/arenaclient:latest \
             /workspace/game_check/weapon_check_bot.py --map "$MAP"
