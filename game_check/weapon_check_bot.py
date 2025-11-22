@@ -336,9 +336,9 @@ class WeaponTestBot(BotAI):
         if not self.pending_units:
             if self.current_index >= len(self.unit_types):
                 if self.any_missmatch:
-                    print(f"✅ Weapon test completed in {iteration} iterations.")
-                else:
                     print(f"❌ Weapon test completed in {iteration} iterations.")
+                else:
+                    print(f"✅ Weapon test completed in {iteration} iterations.")
                 self.done = True
                 return
 

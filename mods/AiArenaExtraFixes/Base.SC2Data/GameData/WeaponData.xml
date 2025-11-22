@@ -9,11 +9,13 @@
 		<TargetFilters value="Air,Dead;" />
 	</CWeaponLegacy>
 	<CWeaponLegacy id="VoidRaySwarm">
-        <Options index="Hidden" value="0"/>
-    </CWeaponLegacy>
-	<CWeaponLegacy id="VolatileBurst">
-        <Options index="Hidden" value="0"/>
-        <Options index="Disabled" value="0"/>
+		<Options index="Hidden" value="0" />
+	</CWeaponLegacy>
+	<CWeaponLegacy id="AiArenaVolatileBurst">
+		<Range value="0.25" />
+		<Period value="0.833" />
+		<DisplayEffect value="AiArenaBanelingDamage" />
+		<TargetFilters value="Ground,Dead;" />
 	</CWeaponLegacy>
 	<CWeaponLegacy id="AiArenaOracleDisplayDummy">
 		<EditorCategories value="Race:Protoss" />
@@ -22,10 +24,10 @@
 		<Range value="4" />
 		<Period value="0.86" />
 	</CWeaponLegacy>
-    <CWeaponLegacy id="DisruptionBeam">
-        <Options index="Hidden" value="0"/>
+	<CWeaponLegacy id="DisruptionBeam">
+		<Options index="Hidden" value="0" />
 	</CWeaponLegacy>
-    <CWeaponLegacy id="WidowMineDummy">
-        <Options index="Hidden" value="0"/>
+	<CWeaponLegacy id="WidowMineDummy">
+		<Options index="Hidden" value="0" />
 	</CWeaponLegacy>
 </Catalog>
