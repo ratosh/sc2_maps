@@ -23,12 +23,12 @@ Current solution to this issue is to add visual buffs to units giving more infor
 * Oracle: Has the basic weapon and a buff telling that weapon is active. Bots should integrate that the weapon is only active when the buff is active.
 * Bunker: No weapons but has buffs to specify the amount of units inside. Bots should copy the weapon from units and changing the attack amount based on the amount of units.
 
-## How to create a map
+## How to build a map
 
 Using build_sc2map.py the script to merge folders and pack the map
 
 Usage:
-    python build_sc2map.py  /path/to/MapFolder /path/to/GamePatch /path/to/ExtraFixes [--force]
+    python build_sc2map.py  /path/to/MapFolder /path/to/GamePatch /path/to/ExtraFixes MapName [--force]
 
 ```sh
 python build_sc2map.py maps/PylonAIE mods/Patch_5_0_14 mods/AiArenaExtraFixes PylonAIE_5_0_14 --force
@@ -37,9 +37,11 @@ python build_sc2map.py maps/PylonAIE mods/Patch_5_0_14 mods/AiArenaExtraFixes Py
 ## How to check
 
 ### Checking weapons
+Batch is an optional param to specify how many paralel checks we do, important for validations that require game actions.
+Timeout is an optional param to specify how many game steps a validation has to complete it's check.
 
 Usage:
-    python game_check\weapon_check_bot.py --map [map_name] --batch [paralel_units] --timeout [spawn_timeout]
+    python game_check\weapon_check_bot.py --map [map_name] [--batch [paralel_units]] [--timeout [spawn_timeout]]
 
 ```sh
 python game_check\weapon_check_bot.py --map PylonAIE_5_0_14 --batch 5 --timeout 30

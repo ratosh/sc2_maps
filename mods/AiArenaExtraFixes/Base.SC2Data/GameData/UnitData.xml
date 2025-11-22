@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
     <CUnit id="Battlecruiser">
-        <WeaponArray Link="AiArenaATSLaserBattery"/>
-        <WeaponArray Link="AiArenaATALaserBattery"/>
-	</CUnit>
-    <CUnit id="VoidRay">
-        <WeaponArray Link="AiArenaVoidRayNormal"/>
-	</CUnit>
-    <CUnit id="Oracle">
-        <WeaponArray index="1" Link="AiArenaOracleDisplayDummy"/>
-	</CUnit>
+        <WeaponArray Link="AiArenaATSLaserBattery" />
+        <WeaponArray Link="AiArenaATALaserBattery" />
+    </CUnit>
     <CUnit id="Baneling">
-        <WeaponArray index="2" Link="AiArenaVolatileBurst"/>
-	</CUnit>
+        <WeaponArray index="2" Link="AiArenaVolatileBurst" />
+    </CUnit>
+    <CUnit id="Oracle">
+        <WeaponArray index="1" Link="AiArenaOracleDisplayDummy" />
+    </CUnit>
     <CUnit id="WidowMineBurrowed">
-        <WeaponArray Link="WidowMineDummy"/>
-	</CUnit>
+        <WeaponArray Link="WidowMineDummy" />
+    </CUnit>
 </Catalog>

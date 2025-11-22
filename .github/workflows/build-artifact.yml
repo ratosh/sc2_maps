@@ -1,4 +1,4 @@
-name: Build SC2 Map Artifacts
+name: Build & Release SC2 Maps
 
 on:
   workflow_dispatch:
@@ -9,6 +9,8 @@ on:
       - "maps/**"
       - "mods/**"
       - "requirements.txt"
+    tags:
+      - "v*"
 
 jobs:
   build:
@@ -22,6 +24,7 @@ jobs:
           - LeyLinesAIE_5_0_14
           - TorchesAIE_5_0_14
           - PersephoneAIE_5_0_14
+          - PylonAIE_5_0_15_95162
 
     steps:
       - uses: actions/checkout@v4
@@ -32,8 +35,43 @@ jobs:
         with:
           map: ${{ matrix.map }}
 
+      - name: Generate short SHA
+        id: shortsha
+        run: echo "value=$(echo $GITHUB_SHA | cut -c1-8)" >> "$GITHUB_OUTPUT"
+
       - name: 📤 Upload SC2Map Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.map }}
+          name: ${{ matrix.map }}-${{ steps.shortsha.outputs.value }}
           path: ${{ steps.build_map.outputs.output_path }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Download all built maps
+        uses: actions/download-artifact@v4
+        with:
+          path: release_assets
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: "SC2 Maps ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload maps to Release
+        run: |
+          for FILE in release_assets/**/*.SC2Map; do
+            echo "Uploading $FILE"
+            gh release upload "${{ github.ref_name }}" "$FILE"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
