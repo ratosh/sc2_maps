@@ -4,14 +4,8 @@
         <WeaponArray Link="AiArenaATSLaserBattery"/>
         <WeaponArray Link="AiArenaATALaserBattery"/>
 	</CUnit>
-    <CUnit id="VoidRay">
-        <WeaponArray Link="AiArenaVoidRayNormal"/>
-	</CUnit>
     <CUnit id="Oracle">
         <WeaponArray index="1" Link="AiArenaOracleDisplayDummy"/>
-	</CUnit>
-    <CUnit id="Baneling">
-        <WeaponArray index="2" Link="AiArenaVolatileBurst"/>
 	</CUnit>
     <CUnit id="WidowMineBurrowed">
         <WeaponArray Link="WidowMineDummy"/>

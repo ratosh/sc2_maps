@@ -2,7 +2,7 @@ import sys
 import argparse
 import abc
 from sc2 import maps
-from sc2.data import Race, Difficulty
+from sc2.data import Attribute, Difficulty, Race, TargetType
 from sc2.main import run_game
 from sc2.player import Bot, Computer
 from sc2.bot_ai import BotAI
@@ -79,6 +79,36 @@ EXPECTED_WEAPONS = {
     UnitTypeId.BUNKER: 0,
 }
 
+def debug_weapons(weapons):
+    print("   Weapon details:")
+    for i, w in enumerate(weapons, start=1):
+            # Convert weapon type to TargetType enum
+        try:
+            target_type = TargetType(w.type).name
+        except ValueError:
+            target_type = f"UNKNOWN({w.type})"
+
+        print(f"     • Weapon {i}:")
+        print(f"         Type: {target_type}")
+        print(f"         Damage: {w.damage}")
+        print(f"         Attacks: {w.attacks}")
+        print(f"         Range: {w.range}")
+        print(f"         Speed: {w.speed}")
+
+            # Damage bonuses
+        if w.damage_bonus:
+            print(f"         Damage Bonuses:")
+            for b in w.damage_bonus:
+                    # Convert attribute to Attribute enum
+                try:
+                    attr_name = Attribute(b.attribute).name
+                except ValueError:
+                    attr_name = f"UNKNOWN({b.attribute})"
+
+                print(f"             - vs {attr_name}: +{b.bonus} damage")
+        else:
+            print(f"         Damage Bonuses: None")
+
 
 class UnitValidator(abc.ABC):
     """Abstract base for all validators."""
@@ -108,9 +138,10 @@ class WeaponValidator(UnitValidator):
         actual = len(weapons)
 
         if actual == expected:
-            print(f"✅ {self.unit_type.name}: {actual}/{expected} weapon(s) OK")
+            print(f"✅ {self.unit_type.name} weapon: {actual}/{expected}")
+            debug_weapons(weapons)
         else:
-            print(f"❌ {self.unit_type.name}: {actual}/{expected} weapon(s) missmatch")
+            print(f"❌ {self.unit_type.name} weapon: {actual}/{expected}")
 
         return True, actual != expected
 
@@ -157,9 +188,10 @@ class WeaponBuffValidator(UnitValidator):
 
         has_buff = self.configs[self.unit_type]["buff"] in unit.buffs
         if actual == expected and has_buff:
-            print(f"✅ {self.unit_type.name}: {actual}/{expected}/{has_buff} weapon(s), buffs {list(unit.buffs)}. OK after Pulsar Beam")
+            print(f"✅ {self.unit_type.name}: {actual}/{expected}/{has_buff} weapon(s), buffs {list(unit.buffs)}.")
+            debug_weapons(weapons)
         else:
-            print(f"❌ {self.unit_type.name}: {actual}/{expected} weapon(s), buffs {list(unit.buffs)} missmatch ")
+            print(f"❌ {self.unit_type.name}: {actual}/{expected} weapon(s), buffs {list(unit.buffs)}")
 
         return True, actual != expected and has_buff
 
@@ -271,7 +303,7 @@ class BunkerValidator(UnitValidator):
             await bot.client.debug_kill_unit(tags)
             self.helpers_spawned = False
 
-
+ 
 class ValidatorManager:
     def __init__(self, bot):
         self.validators = {
@@ -300,7 +332,7 @@ class WeaponTestBot(BotAI):
         if self.done:
             await self.client.leave()
             return
-
+        
         if not self.pending_units:
             if self.current_index >= len(self.unit_types):
                 print(f"✅ Weapon test completed in {iteration} iterations.")

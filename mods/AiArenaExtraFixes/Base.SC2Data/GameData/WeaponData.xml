@@ -2,31 +2,22 @@
 <Catalog>
 	<CWeaponLegacy id="AiArenaATSLaserBattery" parent="ATSLaserBattery">
 		<Options index="Hidden" value="0" />
-		<TargetFilters value="Dead" />
+		<TargetFilters value="Ground,Dead;" />
 	</CWeaponLegacy>
 	<CWeaponLegacy id="AiArenaATALaserBattery" parent="ATALaserBattery">
 		<Options index="Hidden" value="0" />
-		<TargetFilters value="Dead" />
+		<TargetFilters value="Air,Dead;" />
 	</CWeaponLegacy>
-	<CWeaponLegacy id="AiArenaVoidRayNormal">
-		<Options index="Hidden" value="0" />
-		<Range value="6" />
-		<Period value="0.5" />
-		<Effect value="" />
-		<DisplayEffect value="AiArenaVoidRayDamage" />
-		<TargetFilters value="Dead" />
-	</CWeaponLegacy>
-	<CWeaponLegacy id="AiArenaVolatileBurst">
-		<Range value="0.25" />
-		<Period value="0.833" />
-		<DisplayEffect value="AiArenaBanelingDamage" />
-		<TargetFilters value="Dead" />
+	<CWeaponLegacy id="VoidRaySwarm">
+        <Options index="Hidden" value="0"/>
+    </CWeaponLegacy>
+	<CWeaponLegacy id="VolatileBurst">
+        <Options index="Hidden" value="0"/>
 	</CWeaponLegacy>
 	<CWeaponLegacy id="AiArenaOracleDisplayDummy">
 		<EditorCategories value="Race:Protoss" />
-		<Options index="CanInitiateAttackOrder" value="0" />
 		<DisplayEffect value="OracleWeaponDamage" />
-		<TargetFilters value="Dead" />
+		<TargetFilters value="Ground,Dead;-" />
 		<Range value="4" />
 		<Period value="0.86" />
 	</CWeaponLegacy>
