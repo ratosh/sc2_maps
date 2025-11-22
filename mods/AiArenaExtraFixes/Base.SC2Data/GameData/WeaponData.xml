@@ -13,6 +13,7 @@
     </CWeaponLegacy>
 	<CWeaponLegacy id="VolatileBurst">
         <Options index="Hidden" value="0"/>
+        <Options index="Disabled" value="0"/>
 	</CWeaponLegacy>
 	<CWeaponLegacy id="AiArenaOracleDisplayDummy">
 		<EditorCategories value="Race:Protoss" />

@@ -188,7 +188,7 @@ class WeaponBuffValidator(UnitValidator):
 
         has_buff = self.configs[self.unit_type]["buff"] in unit.buffs
         if actual == expected and has_buff:
-            print(f"✅ {self.unit_type.name}: {actual}/{expected}/{has_buff} weapon(s), buffs {list(unit.buffs)}.")
+            print(f"✅ {self.unit_type.name}: {actual}/{expected} weapon(s), buffs {list(unit.buffs)}.")
             debug_weapons(weapons)
         else:
             print(f"❌ {self.unit_type.name}: {actual}/{expected} weapon(s), buffs {list(unit.buffs)}")
@@ -335,7 +335,10 @@ class WeaponTestBot(BotAI):
         
         if not self.pending_units:
             if self.current_index >= len(self.unit_types):
-                print(f"✅ Weapon test completed in {iteration} iterations.")
+                if self.any_missmatch:
+                    print(f"✅ Weapon test completed in {iteration} iterations.")
+                else:
+                    print(f"❌ Weapon test completed in {iteration} iterations.")
                 self.done = True
                 return
 
