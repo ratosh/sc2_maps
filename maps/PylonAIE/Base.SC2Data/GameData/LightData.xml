@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CLight id="AiurCity">
+        <ToDInfoArray index="0" Id="AiurCity" AmbientColor="0.352941,0.380392,0.470588"/>
+    </CLight>
+    <CLight id="ShadowCorpsPlatform">
+        <ToDInfoArray index="0" AmbientColor="0.501961,0.521569,0.662745">
+            <Param index="HDRBloomThreshold" value="1.300000"/>
+            <Param index="HDRSpecMultiplier" value="1.300000"/>
+            <Param index="HDREmisMultiplier" value="1.300000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+        </ToDInfoArray>
+    </CLight>
+</Catalog>

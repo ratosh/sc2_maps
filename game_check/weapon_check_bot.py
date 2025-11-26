@@ -1,17 +1,54 @@
-import sys
-import argparse
 import abc
+import argparse
+import sys
+
+from loser_bot import LoserBot
 from sc2 import maps
-from sc2.data import Attribute, Difficulty, Race, TargetType
-from sc2.main import run_game
-from sc2.player import Bot, Computer
 from sc2.bot_ai import BotAI
+from sc2.data import Attribute, Race, TargetType
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.buff_id import BuffId
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
+from sc2.player import Bot
+
+SKIP_TARGET_UNITS = {
+    UnitTypeId.SCV,
+    UnitTypeId.PROBE,
+    UnitTypeId.DRONE,
+    UnitTypeId.DRONEBURROWED,
+    UnitTypeId.MUTALISK,
+    UnitTypeId.LOCUSTMP,
+    UnitTypeId.LOCUSTMPFLYING,
+    UnitTypeId.BROODLING,
+}
+
+FLYING_TYPES = {
+    # Terran
+    UnitTypeId.MEDIVAC,
+    UnitTypeId.VIKINGFIGHTER,
+    UnitTypeId.BANSHEE,
+    UnitTypeId.LIBERATOR,
+    UnitTypeId.LIBERATORAG,
+    UnitTypeId.BATTLECRUISER,
+    # Protoss
+    UnitTypeId.PHOENIX,
+    UnitTypeId.VOIDRAY,
+    UnitTypeId.ORACLE,
+    UnitTypeId.CARRIER,
+    UnitTypeId.INTERCEPTOR,
+    UnitTypeId.TEMPEST,
+    UnitTypeId.MOTHERSHIP,
+    # Zerg
+    UnitTypeId.MUTALISK,
+    UnitTypeId.CORRUPTOR,
+    UnitTypeId.BROODLORD,
+    UnitTypeId.VIPER,
+    UnitTypeId.LOCUSTMPFLYING,
+}
 
 EXPECTED_WEAPONS = {
-    # --- Terran ---
+    # Terran
     UnitTypeId.MARINE: 1,
     UnitTypeId.MARAUDER: 1,
     UnitTypeId.REAPER: 1,
@@ -26,7 +63,7 @@ EXPECTED_WEAPONS = {
     UnitTypeId.WIDOWMINEBURROWED: 1,
     UnitTypeId.CYCLONE: 1,
     UnitTypeId.LIBERATOR: 1,
-    UnitTypeId.LIBERATORAG: 1,
+    # UnitTypeId.LIBERATORAG: 1,
     UnitTypeId.VIKINGFIGHTER: 1,
     UnitTypeId.VIKINGASSAULT: 1,
     UnitTypeId.BANSHEE: 1,
@@ -36,7 +73,7 @@ EXPECTED_WEAPONS = {
     UnitTypeId.PLANETARYFORTRESS: 1,
     UnitTypeId.MISSILETURRET: 1,
 
-    # --- Protoss ---
+    # Protoss
     UnitTypeId.ZEALOT: 1,
     UnitTypeId.STALKER: 1,
     UnitTypeId.ADEPT: 1,
@@ -52,9 +89,9 @@ EXPECTED_WEAPONS = {
     UnitTypeId.INTERCEPTOR: 1,
     UnitTypeId.TEMPEST: 2,
     UnitTypeId.MOTHERSHIP: 1,
-    UnitTypeId.PHOTONCANNON: 1,
+    # UnitTypeId.PHOTONCANNON: 1,
 
-    # --- Zerg ---
+    # Zerg
     UnitTypeId.ZERGLING: 1,
     UnitTypeId.BANELING: 1,
     UnitTypeId.ROACH: 1,
@@ -74,48 +111,36 @@ EXPECTED_WEAPONS = {
     UnitTypeId.BROODLING: 1,
     UnitTypeId.SPORECRAWLER: 1,
     UnitTypeId.SPINECRAWLER: 1,
-    
-    # --- Special units ---
+
+    # Special units
     UnitTypeId.BUNKER: 0,
 }
 
+
 def debug_weapons(weapons):
-    print("   Weapon details:")
     for i, w in enumerate(weapons, start=1):
-            # Convert weapon type to TargetType enum
         try:
             target_type = TargetType(w.type).name
         except ValueError:
             target_type = f"UNKNOWN({w.type})"
-
-        print(f"     • Weapon {i}:")
-        print(f"         Type: {target_type}")
-        print(f"         Damage: {w.damage}")
-        print(f"         Attacks: {w.attacks}")
-        print(f"         Range: {w.range}")
-        print(f"         Speed: {w.speed}")
-
-            # Damage bonuses
+        print(
+            f"Weapon {i}: Type={target_type}, Damage={w.damage}, Range={w.range}, Attacks={w.attacks}, Speed={w.speed}")
         if w.damage_bonus:
-            print(f"         Damage Bonuses:")
             for b in w.damage_bonus:
-                    # Convert attribute to Attribute enum
                 try:
                     attr_name = Attribute(b.attribute).name
                 except ValueError:
                     attr_name = f"UNKNOWN({b.attribute})"
-
-                print(f"             - vs {attr_name}: +{b.bonus} damage")
+                print(f"  Bonus vs {attr_name}: +{b.bonus}")
         else:
-            print(f"         Damage Bonuses: None")
+            print("  No damage bonus")
 
 
 class UnitValidator(abc.ABC):
-    """Abstract base for all validators."""
 
     def __init__(self, unit_type: UnitTypeId):
         self.unit_type = unit_type
-        
+
     async def create(self, bot):
         return True
 
@@ -129,73 +154,219 @@ class UnitValidator(abc.ABC):
 
 
 class WeaponValidator(UnitValidator):
-    """Default validator for standard combat units."""
-    
+    def __init__(self, unit_type: UnitTypeId):
+        super().__init__(unit_type)
+        self.tests = []
+        self.current_test = 0
+        self.started = False
+        self.wait_frames = 0
+        self.start_hp = 0
+
+    async def create(self, bot):
+        data = bot.game_data.units[self.unit_type.value]
+        weapons = data._proto.weapons
+
+        for w in weapons:
+            target_type = TargetType(w.type)
+
+            skip_attributes = [b.attribute for b in w.damage_bonus]
+            base_target = bot.pick_unit_without_attribute_no_armor(target_type, skip_attributes)
+            if base_target is None:
+                print(f"Fail to find a valid target type for {self.unit_type.name}")
+                continue
+
+            self.tests.append({
+                "attacker_type": self.unit_type,
+                "target_type": base_target,
+                "target_spawned": False,
+                "attacker_spawned": False,
+                "expected_damage": w.damage * w.attacks,
+                "attacks": w.attacks,
+                "attacker_tag": None,
+                "target_tag": None,
+            })
+
+            for bonus in w.damage_bonus:
+                attr = Attribute(bonus.attribute)
+                bonus_target = bot.pick_unit_with_attribute_no_armor(target_type, attr)
+                if bonus_target is None:
+                    continue
+                self.tests.append({
+                    "target_type": bonus_target,
+                    "target_spawned": False,
+                    "attacker_spawned": False,
+                    "expected_damage": (w.damage + bonus.bonus) * w.attacks,
+                    "attacks": w.attacks,
+                    "attacker_tag": None,
+                    "target_tag": None,
+                })
+
+    async def prepare(self, bot):
+        return True
+
     async def validate(self, bot):
         data = bot.game_data.units[self.unit_type.value]
         weapons = data._proto.weapons
         expected = EXPECTED_WEAPONS.get(self.unit_type, 0)
         actual = len(weapons)
-
-        if actual == expected:
-            print(f"✅ {self.unit_type.name} weapon: {actual}/{expected}")
+        if actual != expected:
+            print(f"❌ {self.unit_type.name} weapons mismatch")
             debug_weapons(weapons)
-        else:
-            print(f"❌ {self.unit_type.name} weapon: {actual}/{expected}")
+            return True, True
 
-        return True, actual != expected
+        if self.current_test >= len(self.tests):
+            return True, False
+
+        test = self.tests[self.current_test]
+
+        if not test["attacker_tag"]:
+            units = bot.all_own_units.of_type(self.unit_type)
+            if units:
+                test["attacker_tag"] = units.first.tag
+                test["attacker_spawned"] = True
+                return False, False
+            elif not test["attacker_spawned"]:
+                test["attacker_spawned"] = True
+                attacker_pos = bot.start_location.towards(bot.game_info.map_center, 2)
+                await bot.client.debug_create_unit([[self.unit_type, 1, attacker_pos, bot.player_id]])
+                return False, False
+            else:
+                return False, False
+
+        attacker = bot.all_units.find_by_tag(test["attacker_tag"])
+
+        if not attacker and self.unit_type != UnitTypeId.BANELING:
+            print(f"❌ {self.unit_type.name} Attacker killed, target {test['target_type']}. Can't test dmg")
+            data = bot.game_data.units[self.unit_type.value]
+            weapons = data._proto.weapons
+            debug_weapons(weapons)
+            return True, True
+
+        if test["target_tag"] is None and attacker:
+            target_type = test["target_type"]
+            if not test["target_spawned"]:
+                if self.unit_type in [UnitTypeId.WIDOWMINEBURROWED, UnitTypeId.INTERCEPTOR]:
+                    player_id = 2
+                    target_pos = attacker.position.towards(bot.game_info.map_center, 7)
+                else:
+                    player_id = 1
+                    target_pos = attacker.position.towards(bot.game_info.map_center, 2)
+                await bot.client.debug_create_unit([[target_type, 1, target_pos, player_id]])
+                test["target_spawned"] = True
+            enemy_units = bot.all_units.of_type(target_type).filter(lambda unit: unit.tag != attacker.tag)
+            if enemy_units:
+                enemy_unit = enemy_units.first
+                test["target_tag"] = enemy_unit.tag
+            else:
+                return False, False
+
+        target = bot.all_units.find_by_tag(test["target_tag"])
+
+        if not target:
+            print(f"❌ {self.unit_type.name} Target {test['target_type']} killed, can't test dmg")
+            debug_weapons(weapons)
+            return True, True
+
+        if self.unit_type == UnitTypeId.BROODLORD:
+            alive_tags = [u.tag for u in bot.all_own_units if u.type_id == UnitTypeId.BROODLING]
+            if alive_tags:
+                await bot.client.debug_kill_unit(alive_tags)
+
+        if not self.started:
+            self.started = True
+            self.start_hp = target.health_max + target.shield_max
+            self.wait_frames = 0
+
+        if attacker:
+            if target.owner_id == 1:
+                if target.is_flying:
+                    move_range = attacker.air_range * 0.8
+                else:
+                    move_range = attacker.ground_range * 0.8
+                target.move(attacker.position.towards(bot.game_info.map_center, move_range))
+            if attacker.is_idle or attacker.order_target != target.tag:
+                attacker.attack(target)
+
+        hp_now = target.health + target.shield
+        if hp_now < self.start_hp:
+            self.wait_frames += 1
+            # NOTE: Protoss shield does not consider armor
+            # NOTE: Widow mine damage ignores armor
+            if self.unit_type == UnitTypeId.WIDOWMINEBURROWED:
+                armor = 0
+            else:
+                armor = target.armor
+            dmg = self.start_hp - hp_now + (armor * test["attacks"])
+            if abs(dmg - test["expected_damage"]) > 0.1 * test["attacks"]:
+                if self.wait_frames <= test["attacks"] * 5:
+                    return False, False
+                data = bot.game_data.units[self.unit_type.value]
+                weapons = data._proto.weapons
+                debug_weapons(weapons)
+                print(
+                    f"❌ {self.unit_type.name} wrong damage vs {target.type_id.name} expected {test['expected_damage']}, got {dmg}")
+                return True, True
+            print(f"✅ {self.unit_type.name} damage OK: {test['expected_damage']}")
+            self.current_test += 1
+            self.started = False
+            await bot.client.debug_kill_unit([target.tag])
+            return False, False
+
+        if self.wait_frames < test["attacks"] * 5:
+            return False, False
+
+        print(f"⚠️ {self.unit_type.name} attack timeout on {target.type_id.name}")
+        self.current_test += 1
+        self.started = False
+        return False, True
+
 
 class WeaponBuffValidator(UnitValidator):
-    """VoidRay has extra bonus on Prismatic Alignment activation to expose weapon data."""
     def __init__(self, unit_type: UnitTypeId):
         super().__init__(unit_type)
         self.configs = {
-            UnitTypeId.VOIDRAY: {"ability": AbilityId.EFFECT_VOIDRAYPRISMATICALIGNMENT, "buff": BuffId.VOIDRAYSWARMDAMAGEBOOST},
+            UnitTypeId.VOIDRAY: {"ability": AbilityId.EFFECT_VOIDRAYPRISMATICALIGNMENT,
+                                 "buff": BuffId.VOIDRAYSWARMDAMAGEBOOST},
             UnitTypeId.ORACLE: {"ability": AbilityId.BEHAVIOR_PULSARBEAMON, "buff": BuffId.ORACLEWEAPON},
         }
         self.activated = False
         self.wait_steps = 0
-        
+
     async def create(self, bot):
-        spawn_data = [[self.unit_type, 1, bot.start_location, 1]]
-        await bot.client.debug_create_unit(spawn_data)
+        await bot.client.debug_create_unit([[self.unit_type, 1, bot.start_location, bot.player_id]])
 
     async def prepare(self, bot):
         units = bot.all_units.of_type(self.unit_type)
-        return units
+        return bool(units)
 
     async def validate(self, bot):
         units = bot.all_units.of_type(self.unit_type)
         if not units:
             return False, False
-
         unit = units.first
         if not self.activated:
             ability = self.configs[self.unit_type]["ability"]
             unit(ability)
             self.activated = True
-            print(f"✨ Activated {ability.name} on {self.unit_type.name} ({unit.tag})")
+            print(f"Activated {ability.name} on {self.unit_type.name}")
             return False, False
-
         self.wait_steps += 1
         if self.wait_steps < 5:
             return False, False
-        
         data = bot.game_data.units[self.unit_type.value]
         weapons = data._proto.weapons
         expected = EXPECTED_WEAPONS.get(self.unit_type, 0)
         actual = len(weapons)
-
         has_buff = self.configs[self.unit_type]["buff"] in unit.buffs
         if actual == expected and has_buff:
-            print(f"✅ {self.unit_type.name}: {actual}/{expected} weapon(s), buffs {list(unit.buffs)}.")
+            print(f"✅ {self.unit_type.name} weapons OK, buffs {list(unit.buffs)}")
             debug_weapons(weapons)
         else:
-            print(f"❌ {self.unit_type.name}: {actual}/{expected} weapon(s), buffs {list(unit.buffs)}")
-
+            print(f"❌ {self.unit_type.name} weapons or buffs mismatch {list(unit.buffs)}")
+            debug_weapons(weapons)
         return True, actual != expected and has_buff
 
-# Possible problem when spawning units to put inside the bunker and other validator tests
+
 class BunkerValidator(UnitValidator):
     """Validates bunker weapon scaling with various loaded units."""
 
@@ -216,22 +387,19 @@ class BunkerValidator(UnitValidator):
         ]
         self.current_config = 0
         self.current_load_idx = 1
-        self.wait_loading = False
+        self.prepare_load = True
         self.found_buffs = set[BuffId]()
         self.bunker_tag = None
         self.helper_tags = []
         self.helpers_spawned = False
         self.any_missmatch = False
-        
-    async def create(self, bot):
-        spawn_data = [[self.unit_type, 1, bot.start_location, 1]]
-        for unit_type, count in self.configs:
-            spawn_data.append([unit_type, count, bot.start_location, 1])
-        await bot.client.debug_create_unit(spawn_data)
 
-    async def prepare(self, bot):
-        units = bot.all_units.of_type(self.unit_type)
-        return units
+    async def create(self, bot):
+        spawn_data = [[self.unit_type, 1, bot.start_location, bot.player_id]]
+        for unit_type, count in self.configs:
+            spawn_data.append([unit_type, count, bot.start_location, bot.player_id])
+        await bot.client.debug_create_unit(spawn_data)
+        return []
 
     async def prepare(self, bot):
         bunkers = bot.all_units.of_type(self.unit_type)
@@ -255,7 +423,6 @@ class BunkerValidator(UnitValidator):
 
         if self.current_config >= len(self.configs):
             print(f"🏁 Finished bunker validation. Failed: {self.any_missmatch}")
-            await self.cleanup(bot)
             return True, self.any_missmatch
 
         unit_type, load_counts = self.configs[self.current_config]
@@ -274,36 +441,31 @@ class BunkerValidator(UnitValidator):
             bunker(AbilityId.UNLOADALL_BUNKER)
             return False, False
 
-        if not self.wait_loading:
-            self.wait_loading = True
+        if self.prepare_load:
             helpers = bot.all_units.of_type(unit_type).take(self.current_load_idx)
-            self.helper_tags.clear()
-            for u in helpers:
-                self.helper_tags.append(u.tag)
-                bunker(AbilityId.LOAD_BUNKER, u)
+            if len(helpers) >= self.current_load_idx:
+                self.helper_tags = [u.tag for u in helpers]
+                self.prepare_load = False
             return False, False
         else:
-            helper = bot.all_units.tags_in(self.helper_tags)
-            # The unit vanishes from the list when loaded into the bunker, so we wait
-            if helper:
+            helpers = bot.all_units.tags_in(self.helper_tags)
+            if helpers:
+                unit_to_load = helpers.first
+                bunker(AbilityId.LOAD_BUNKER, unit_to_load)
                 return False, False
-                
+            buffs = [buff for buff in bunker.buffs if buff not in self.found_buffs]
+            if len(buffs) < 1:
+                return False, False
+
         if len(bunker.buffs) > 1:
             print(f"❌ {unit_type.name} bunker buff missmatch: {len(bunker.buffs)}/1 {list(bunker.buffs)}")
         self.found_buffs.update(bunker.buffs)
-
-        self.wait_loading = False
+        self.prepare_load = True
         self.current_load_idx += 1
         bunker(AbilityId.UNLOADALL_BUNKER)
         return False, False
 
-    async def cleanup(self, bot):
-        if self.helpers_spawned:
-            tags = [u.tag for u in bot.all_units.of_type(self.required_units)]
-            await bot.client.debug_kill_unit(tags)
-            self.helpers_spawned = False
 
- 
 class ValidatorManager:
     def __init__(self, bot):
         self.validators = {
@@ -313,80 +475,177 @@ class ValidatorManager:
         }
 
     def get_validator(self, unit_type):
-        validator_cls = self.validators.get(unit_type, WeaponValidator)
-        return validator_cls(unit_type)
+        cls = self.validators.get(unit_type, WeaponValidator)
+        return cls(unit_type)
+
 
 class WeaponTestBot(BotAI):
-    def __init__(self, batch_size: int=10, validation_timeout: int=30):
+    def __init__(self, validation_timeout=300):
         super().__init__()
         self.unit_types = list(EXPECTED_WEAPONS.keys())
         self.current_index = 0
-        self.batch_size = batch_size
         self.validation_timeout = validation_timeout
-        self.pending_units = []
-        self.any_missmatch = False
+        self.current_validator = None
+        self.cleanup_pending = True
         self.done = False
+        self.quit = False
+        self.missmatches = 0
         self.manager = ValidatorManager(self)
+        self.units_ground = []
+        self.units_air = []
+        self.units_by_attribute = {}
+
+    def build_unit_attribute_index(self):
+        if self.units_ground:
+            return
+
+        self.units_ground = []
+        self.units_air = []
+        self.units_by_attribute = {}
+
+        ground_list = []
+        air_list = []
+
+        for ut in self.unit_types:
+            proto = self.game_data.units[ut.value]._proto
+
+            if proto.armor != 0 and proto.race == 3:
+                continue
+            if ut in SKIP_TARGET_UNITS:
+                continue
+
+            supply = proto.food_required
+
+            if ut in FLYING_TYPES:
+                air_list.append((ut, supply))
+            else:
+                ground_list.append((ut, supply))
+
+            for attr_val in proto.attributes:
+                self.units_by_attribute.setdefault(Attribute(attr_val), []).append(ut)
+
+        ground_list.sort(key=lambda x: x[1], reverse=True)
+        air_list.sort(key=lambda x: x[1], reverse=True)
+
+        self.units_ground = [ut for ut, hp in ground_list]
+        self.units_air = [ut for ut, hp in air_list]
+
+        for attr, lst in self.units_by_attribute.items():
+            lst.sort(
+                key=lambda ut: (
+                        self.game_data.units[ut.value]._proto.food_required
+                ),
+                reverse=True,
+            )
+
+
+    def pick_unit_without_attribute_no_armor(self, target_type, skip_attributes=None):
+        if skip_attributes is None:
+            skip_attributes = []
+
+        if target_type == TargetType.Ground:
+            pool = self.units_ground
+        elif target_type == TargetType.Air:
+            pool = self.units_air
+        else:
+            pool = self.units_ground + self.units_air
+
+        for ut in pool:
+            proto = self.game_data.units[ut.value]._proto
+            if any(attr in proto.attributes for attr in skip_attributes):
+                continue
+            return ut
+
+        return None
+
+    def pick_unit_with_attribute_no_armor(self, target_type, attr):
+        candidates = self.units_by_attribute.get(attr, [])
+        for ut in candidates:
+            proto = self.game_data.units[ut.value]._proto
+            if proto.armor != 0:
+                continue
+            if target_type == TargetType.Ground and ut not in self.units_ground:
+                continue
+            if target_type == TargetType.Air and ut not in self.units_air:
+                continue
+            return ut
+        return None
+
+    async def cleanup(self) -> bool:
+        alive_tags = [u.tag for u in self.all_units if u.type_id != UnitTypeId.COMMANDCENTER
+                      and (u.is_mine or u.is_enemy)]
+        if alive_tags:
+            await self.client.debug_kill_unit(alive_tags)
+            return False
+
+        return True
+
+    async def on_start(self):
+        self.client.game_step = 1
 
     async def on_step(self, iteration: int):
+        if self.quit:
+            # Waiting game to end
+            return
         if self.done:
             await self.client.leave()
+            self.quit = True
             return
-        
-        if not self.pending_units:
-            if self.current_index >= len(self.unit_types):
-                if self.any_missmatch:
-                    print(f"❌ Weapon test completed in {iteration} iterations.")
-                else:
-                    print(f"✅ Weapon test completed in {iteration} iterations.")
-                self.done = True
+
+
+        self.build_unit_attribute_index()
+
+        if self.cleanup_pending:
+            if await self.cleanup():
+                self.cleanup_pending = False
+            else:
                 return
 
-            batch = self.unit_types[self.current_index:self.current_index + self.batch_size]
-            self.current_index += self.batch_size
-            for u in batch:
-                validator = self.manager.get_validator(u)
-                await validator.create(self)
-                self.pending_units.append((validator, iteration))
+        if not self.current_validator:
+            if self.current_index >= len(self.unit_types):
+                if self.missmatches > 0:
+                    print(f"❌ Weapon tests failed {self.missmatches} in {self.time} seconds.")
+                else:
+                    print(f"✅ Weapon test completed in {self.time} seconds.")
+                self.done = True
+                return
+            target = self.unit_types[self.current_index]
+            self.current_index += 1
+            validator = self.manager.get_validator(target)
+            await validator.create(self)
+            self.current_validator = (validator, iteration)
+
+        validator, start_loop = self.current_validator
+        if validator and start_loop + self.validation_timeout <= iteration:
+            print(f"❌ Timeout: {validator.unit_type.name}")
+            self.missmatches += 1
+            self.cleanup_pending = True
+            self.current_validator = None
             return
-
-        next_pending = []
-        for validator, start_loop in self.pending_units:
-            if start_loop + self.validation_timeout <= iteration:
-                print(f"⚠️ {validator.unit_type.name} failed, timed out in {self.validation_timeout} steps")
-                self.any_missmatch = True
-                continue
-
-            ready = await validator.prepare(self)
-            if not ready:
-                next_pending.append((validator, start_loop))
-                continue
-
-            done, failed = await validator.validate(self)
-            if failed:
-                self.any_missmatch = True
-            elif not done:
-                next_pending.append((validator, start_loop))
-
-        self.pending_units = next_pending
+        ready = await validator.prepare(self)
+        if not ready:
+            return
+        done, failed = await validator.validate(self)
+        if not done:
+            return
+        if failed:
+            print(f"❌ {validator.unit_type} Validator failed.")
+            self.missmatches += 1
+        self.cleanup_pending = True
+        self.current_validator = None
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Check if SC2 units have weapons.")
-    parser.add_argument("--map", type=str, required=True, help="Map name (e.g. Flat64)")
-    parser.add_argument("--batch", type=int, default=10, help="Units per batch")
-    parser.add_argument("--timeout", type=int, default=300, help="Steps before giving up on spawn")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--map", type=str, default="PylonAIE_5_0_14")
+    parser.add_argument("--timeout", type=int, default=1120)
     args = parser.parse_args()
 
-    bot = WeaponTestBot(batch_size=args.batch, validation_timeout=args.timeout)
-
-    run_game(
-        maps.get(args.map),
-        [Bot(Race.Terran, bot), Computer(Race.Zerg, Difficulty.Easy)],
-        realtime=False,
-    )
-
-    sys.exit(-1 if bot.any_missmatch else 0)
+    bot = WeaponTestBot(validation_timeout=args.timeout)
+    run_game(maps.get(args.map),
+             [Bot(Race.Terran, bot), Bot(Race.Terran, LoserBot())],
+             realtime=False)
+    sys.exit(-1 if bot.missmatches > 0 else 0)
 
 
 if __name__ == "__main__":

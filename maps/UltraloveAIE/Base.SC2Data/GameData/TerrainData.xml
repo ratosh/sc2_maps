@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CTerrain id="KorhalPlatformEx2">
+        <FogDensity value="0.500000"/>
+        <FogFalloff value="0.300000"/>
+    </CTerrain>
+    <CTerrain id="RedstoneEx1">
+        <BlendTextures index="0" value="DominionLab1"/>
+        <BlendTextures index="1" value="DominionLab3"/>
+        <BlendTextures index="2" value="HybridLabInner6"/>
+        <BlendTextures index="3" value="HybridLabInner8"/>
+        <BlendTextures index="4" value="JarbanMinor_Jungle3"/>
+        <BlendTextures index="5" value="SlaynGrass4"/>
+        <BlendTextures index="6" value="KorhalCityEx2_5"/>
+        <BlendTextures index="7" value="KorhalCityEx2_8"/>
+        <CliffSets index="0" value="TheVoidCliff0"/>
+        <CliffSets index="1" value="HybridLabOuterCliff0"/>
+        <Lighting value="Avernus"/>
+        <MinimapBrightenFactor value="0.500000"/>
+        <FogColor value="255,0,15,145"/>
+        <FogDensity value="0.000000"/>
+        <FogFalloff value="0.300000"/>
+        <EditorCategories value="Climate:SpacePlatform"/>
+        <TextureProp value="braxisalpha"/>
+        <HideLowestLevel value="1"/>
+        <LoadingScreen value="Assets\Textures\loading-castanar.dds"/>
+        <FogEnabled value="0"/>
+    </CTerrain>
+</Catalog>

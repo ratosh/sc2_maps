@@ -11,6 +11,6 @@
         <WeaponArray index="1" Link="AiArenaOracleDisplayDummy" />
     </CUnit>
     <CUnit id="WidowMineBurrowed">
-        <WeaponArray Link="WidowMineDummy" />
+        <WeaponArray Link="AiArenaWidowMineDummy" />
     </CUnit>
 </Catalog>

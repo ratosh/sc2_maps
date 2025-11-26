@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectDamage id="AiArenaBCGroundDamage">
+        <Amount value="8" />
+    </CEffectDamage>
+    <CEffectDamage id="AiArenaBCAirDamage">
+        <Amount value="5" />
+    </CEffectDamage>
     <CEffectDamage id="AiArenaVoidRayDamage">
         <AttributeBonus index="Armored" value="4" />
         <Amount value="6" />
@@ -7,6 +13,9 @@
     <CEffectDamage id="AiArenaBanelingDamage">
         <AttributeBonus index="Light" value="19" />
         <Amount value="16" />
+    </CEffectDamage>
+    <CEffectDamage id="AiArenaWidowMineWeaponDamage">
+        <Amount value="125" />
     </CEffectDamage>
     <CEffectApplyBehavior id="BunkerApply1MarineBuffEffect">
         <Behavior value="Has1MarineBuff" />

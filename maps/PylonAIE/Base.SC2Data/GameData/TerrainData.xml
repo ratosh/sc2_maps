@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CTerrain id="ShadowCorpsPlatform">
+        <BlendTextures index="0" value="ShakurasTemple1"/>
+        <BlendTextures index="1" value="Elsecaro1"/>
+        <BlendTextures index="2" value="ShakurasSand"/>
+        <BlendTextures index="3" value="ShakurasCity3"/>
+        <BlendTextures index="4" value="ShakurasCity1"/>
+        <BlendTextures index="5" value="Aiur4City5"/>
+        <BlendTextures index="6" value="ShakurasTemple3"/>
+        <BlendTextures index="7" value="Elsecaro12"/>
+        <FixedSkyboxModel value=""/>
+        <NonFixedSkyboxModel value=""/>
+        <FogDensity value="1.000000"/>
+        <FogStartingHeight value="-8.000000"/>
+        <Lighting value="KorhalPlatform"/>
+        <HideLowestLevel value="0"/>
+        <CliffSets index="0" value="ProtossBaseManmadeCliffs"/>
+        <CliffSets index="1" value="ShakurasEx1Cliff0"/>
+        <HeightMapEnabled value="1"/>
+        <FogColor value="255,71,88,133"/>
+        <FogFalloff value="0.230000"/>
+        <MinimapBrightenFactor value="1.000000"/>
+    </CTerrain>
+</Catalog>

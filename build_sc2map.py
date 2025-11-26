@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+from collections import Counter
 import argparse
 import shutil
 import subprocess
@@ -9,9 +10,6 @@ from pathlib import Path
 from typing import Optional
 from lxml import etree as ET
 
-# ──────────────────────────────────────────────────────────────────────────────
-# XML MERGE
-# ──────────────────────────────────────────────────────────────────────────────
 
 def merge_catalog_xml(file_a: Path, file_b: Path, out_file: Path) -> None:
     """Merge two SC2 catalog XML files node-by-node and child-by-child."""
@@ -59,53 +57,142 @@ def merge_catalog_xml(file_a: Path, file_b: Path, out_file: Path) -> None:
     out_file.parent.mkdir(parents=True, exist_ok=True)
     ET.ElementTree(merged).write(str(out_file), encoding="utf-8", pretty_print=True, xml_declaration=True)
 
+
+def xml_identity_key(node: ET._Element):
+    """
+    Determine a stable identity for SC2 XML.
+    """
+    a = node.attrib
+
+    if "id" in a:
+        return ("id", node.tag, a["id"])
+    if "index" in a:
+        return ("index", node.tag, a["index"])
+    if "value" in a:
+        return ("value", node.tag, a["value"])
+    if a:
+        return ("attrs", node.tag, tuple(sorted(a.items())))
+    return ("unique", None)  # None because we won't use object id for uniqueness check here
+
+def element_signature(node: ET._Element):
+    tag = node.tag
+    attrib_tuple = tuple(sorted(node.attrib.items()))
+    text = (node.text.strip() if node.text and node.text.strip() else None)
+
+    child_sigs = []
+    for c in node:
+        child_sigs.append(element_signature(c))
+
+    children_counter = Counter(child_sigs)
+
+    children_counter_tuple = tuple(sorted(children_counter.items()))
+
+    return (tag, attrib_tuple, text, children_counter_tuple)
+
 def merge_xml_children_nodes(target: ET._Element, source: ET._Element) -> None:
-    """Merge sub-elements and attributes of matching XML nodes."""
+    """
+    Merge sub-elements and attributes of matching XML nodes.
+    """
     for k, v in source.attrib.items():
         target.attrib[k] = v
-    index_map = {(c.tag, c.attrib.get("index")): c for c in target}
-    for c in source:
-        key = (c.tag, c.attrib.get("index"))
-        if key in index_map:
-            merge_xml_children_nodes(index_map[key], c)
+
+    key_map: dict[tuple, list[ET._Element]] = {}
+    for c in target:
+        key = xml_identity_key(c)
+        key_map.setdefault(key, []).append(c)
+
+    for child in source:
+        key = xml_identity_key(child)
+        if key[0] != "unique":
+            targets = key_map.get(key)
+            if targets:
+                merge_xml_children_nodes(targets[0], child)
+            else:
+                target.append(child)
+                key_map.setdefault(key, []).append(child)
         else:
-            target.append(c)
+            child_sig = element_signature(child)
 
-# ──────────────────────────────────────────────────────────────────────────────
-# TXT MERGE (key=value lines)
-# ──────────────────────────────────────────────────────────────────────────────
+            existing_list = []
 
-def merge_txt_files(base: Path, patch: Path, extra: Path, out_file: Path) -> None:
-    """Merge three txt files (map < patch < extra). On conflict, higher wins."""
-    def read_kv(path: Path) -> dict[str, str]:
-        data = {}
+            for k, lst in key_map.items():
+                if k[0] == "unique" and k[1] == child.tag:
+                    existing_list.extend(lst)
+
+            found_equivalent = False
+            for existing in existing_list:
+                if element_signature(existing) == child_sig:
+                    found_equivalent = True
+                    break
+
+            if not found_equivalent:
+                target.append(child)
+                key_map.setdefault(("unique", child.tag), []).append(child)
+
+
+def merge_ini_files(base: Path, patch: Path, extra: Path, out_file: Path) -> None:
+    """Merge three INI/TXT files with sections. Priority: map < patch < extra."""
+
+    def read_ini(path: Path) -> dict[str, dict[str, str]]:
+        data: dict[str, dict[str, str]] = {}
         if not path.exists():
             return data
-        for line in path.read_text(encoding="utf-8-sig", errors="ignore").splitlines():
-            if "=" in line and not line.strip().startswith("#"):
+
+        current = "__root__"
+        data[current] = {}
+
+        for raw in path.read_text(encoding="utf-8-sig", errors="ignore").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or line.startswith(";"):
+                continue
+
+            if line.startswith("[") and line.endswith("]"):
+                current = line[1:-1].strip()
+                data.setdefault(current, {})
+                continue
+
+            if "=" in line:
                 k, v = line.split("=", 1)
-                data[k.strip()] = v.strip()
+                data.setdefault(current, {})[k.strip()] = v.strip()
+
         return data
 
-    base_kv = read_kv(base)
-    patch_kv = read_kv(patch)
-    extra_kv = read_kv(extra)
+    def merge_dicts(low: dict, high: dict, name: str) -> None:
+        """Merge high-priority dict into low-priority dict, warn on conflict."""
+        for section, kv in high.items():
+            if section not in low:
+                low[section] = kv.copy()
+                continue
 
-    merged = base_kv.copy()
-    for src, name in [(patch_kv, "patch"), (extra_kv, "extra")]:
-        for k, v in src.items():
-            if k in merged and merged[k] != v:
-                print(f"⚠️ TXT Merger Conflict: On '{k}' → using {name} value ({v})")
-            merged[k] = v
+            for k, v in kv.items():
+                if k in low[section] and low[section][k] != v:
+                    print(f"⚠️ INI Merger Conflict: [{section}] {k} → using {name} value ({v})")
+                low[section][k] = v
+
+    if not patch.exists() and not extra.exists():
+        shutil.copy(base, out_file)
+        return
+
+    base_ini = read_ini(base)
+    patch_ini = read_ini(patch)
+    extra_ini = read_ini(extra)
+
+    merged = base_ini
+    merge_dicts(merged, patch_ini, "patch")
+    merge_dicts(merged, extra_ini, "extra")
 
     out_file.parent.mkdir(parents=True, exist_ok=True)
     with out_file.open("w", encoding="utf-8", newline="\n") as f:
-        for k, v in sorted(merged.items()):
-            f.write(f"{k}={v}\n")
+        if "__root__" in merged and merged["__root__"]:
+            for k, v in sorted(merged["__root__"].items()):
+                f.write(f"{k} = {v}\n")
+            f.write("\n")
 
-# ──────────────────────────────────────────────────────────────────────────────
-# FILE MERGING STRATEGY
-# ──────────────────────────────────────────────────────────────────────────────
+        for section in sorted(s for s in merged.keys() if s != "__root__"):
+            f.write(f"[{section}]\n")
+            for k, v in sorted(merged[section].items()):
+                f.write(f"{k} = {v}\n")
+            f.write("\n")
 
 def merge_file_triple(base: Path, patch: Path, extra: Path, dest: Path) -> None:
     """Merge or copy directly into dest (no temp files)."""
@@ -117,26 +204,19 @@ def merge_file_triple(base: Path, patch: Path, extra: Path, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
 
     if suffix == ".xml":
-        # Start with map or patch
         if base.exists():
             shutil.copy(base, dest)
-        elif patch.exists():
-            shutil.copy(patch, dest)
-        # Merge patch and extra over it
+            
         if patch.exists():
             merge_catalog_xml(dest, patch, dest)
         if extra.exists():
             merge_catalog_xml(dest, extra, dest)
-    elif suffix == ".txt":
-        merge_txt_files(base, patch, extra, dest)
+    elif suffix in [".txt", ".ini"]:
+        merge_ini_files(base, patch, extra, dest)
     else:
-        # Copy the highest-priority existing file
         src = extra if extra.exists() else patch if patch.exists() else base
         shutil.copy(src, dest)
 
-# ──────────────────────────────────────────────────────────────────────────────
-# MERGE PIPELINE: MAP < PATCH < EXTRA
-# ──────────────────────────────────────────────────────────────────────────────
 
 def merge_all(map_dir: Path, patch_dir: Path, extra_dir: Path, out_dir: Path) -> None:
     """Merge map < patch < extra directly into out_dir."""
@@ -157,9 +237,6 @@ def merge_all(map_dir: Path, patch_dir: Path, extra_dir: Path, out_dir: Path) ->
         dest = out_dir / rel
         merge_file_triple(base, patch, extra, dest)
 
-# ──────────────────────────────────────────────────────────────────────────────
-# PACK MAP
-# ──────────────────────────────────────────────────────────────────────────────
 
 def pack_map_folder(src_folder: Path, out_file: Path, force: bool = False) -> None:
     """Pack a map folder into a .SC2Map (MPQ) using Docker + mpqcli."""
@@ -196,9 +273,6 @@ def pack_map_folder(src_folder: Path, out_file: Path, force: bool = False) -> No
         shutil.move(str(mpq_out), str(out_file))
         print(f"✅ Packed SC2Map created → {out_file}")
 
-# ──────────────────────────────────────────────────────────────────────────────
-# CLI
-# ──────────────────────────────────────────────────────────────────────────────
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Merge SC2 map, patch, and extra fixes into a packed .SC2Map")
