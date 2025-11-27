@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CTerrain id="HybridLabXelNaga">
+        <BlendTextures index="0" value="UmojaEx3_2"/>
+        <BlendTextures index="1" value="UmojaEx3_1"/>
+        <BlendTextures index="2" value="Endion6"/>
+        <BlendTextures index="3" value="Aiur4City6"/>
+        <BlendTextures index="4" value="CharRock"/>
+        <BlendTextures index="5" value="KorhalOutskirts7"/>
+        <BlendTextures index="6" value="AiurTempleJungle6"/>
+        <BlendTextures index="7" value="KorhalCity6"/>
+        <CliffSets index="0" value="KorhalOutskirtsCliff0"/>
+        <CliffSets index="1" value="HybridLabOuterCliff0"/>
+        <FogEnabled value="1"/>
+        <FogColor value="255,100,62,181"/>
+        <LoadingScreen value="Assets\Textures\ui_void_loading_purifier02.dds"/>
+    </CTerrain>
+</Catalog>

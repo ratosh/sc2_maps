@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CLight id="HybridLabXelNaga">
+        <ToDInfoArray index="0" Id="HybridLabXelNaga" AmbientColor="0.356863,0.349020,0.360784">
+            <Param index="HDRExposure" value="1.600000"/>
+            <Param index="ColorizationOutputLow" value="0.018000"/>
+            <Param index="ColorizationBrightness" value="1.020000"/>
+            <Param index="ColorizationHue" value="0.143000"/>
+            <Param index="ColorizationSaturation" value="0.090000"/>
+            <DirectionalLight index="Key" Color="1.000000,0.933333,0.866667" ColorMultiplier="1.250000"/>
+            <DirectionalLight index="Fill" Color="0.505882,0.788235,0.894118"/>
+            <DirectionalLight index="Back" Color="0.266667,0.388235,0.643137"/>
+        </ToDInfoArray>
+    </CLight>
+</Catalog>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CLight id="HybridLabXelNaga">
+        <ToDInfoArray index="0" Id="HybridLabXelNaga" AmbientColor="0.564706,0.549020,0.450980">
+            <DirectionalLight index="Key" Color="1.000000,0.996078,0.862745" ColorMultiplier="1.000000"/>
+            <DirectionalLight index="Fill" Color="0.258824,0.184314,0.164706" ColorMultiplier="3.000000"/>
+            <DirectionalLight index="Back" ColorMultiplier="1.496000"/>
+        </ToDInfoArray>
+    </CLight>
+</Catalog>

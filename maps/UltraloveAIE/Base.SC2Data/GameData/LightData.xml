@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CLight id="Avernus">
+        <ToDInfoArray index="0" AmbientColor="0.184314,0.211765,0.321569">
+            <Param index="HDRDiffuseMultiplier" value="1.500000"/>
+            <Param index="HDRSpecMultiplier" value="1.500000"/>
+            <Param index="HDREmisMultiplier" value="1.250000"/>
+            <DirectionalLight index="Fill" Color="0.219608,0.254902,0.831373" Direction="0.943251,-0.026677,0.331009"/>
+            <DirectionalLight index="Back" Color="0.811765,0.101961,0.137255" ColorMultiplier="1.479000" Direction="-0.870504,0.047755,0.489839"/>
+        </ToDInfoArray>
+    </CLight>
+</Catalog>

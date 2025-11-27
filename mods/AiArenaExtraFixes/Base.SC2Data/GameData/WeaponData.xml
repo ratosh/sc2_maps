@@ -27,7 +27,10 @@
 	<CWeaponLegacy id="DisruptionBeam">
 		<Options index="Hidden" value="0" />
 	</CWeaponLegacy>
-	<CWeaponLegacy id="WidowMineDummy">
-		<Options index="Hidden" value="0" />
+	<CWeaponLegacy id="AiArenaWidowMineDummy">
+		<DisplayEffect value="AiArenaWidowMineWeaponDamage" />
+		<TargetFilters value="Dead;-" />
+		<Range value="5" />
+		<Period value="41.0" />
 	</CWeaponLegacy>
 </Catalog>
