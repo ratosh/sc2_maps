@@ -175,13 +175,17 @@ class WeaponValidator(UnitValidator):
                 print(f"Fail to find a valid target type for {self.unit_type.name}")
                 continue
 
+            attacks = w.attacks
+            if self.unit_type == UnitTypeId.BROODLORD:
+                attacks = 2
+
             self.tests.append({
                 "attacker_type": self.unit_type,
                 "target_type": base_target,
                 "target_spawned": False,
                 "attacker_spawned": False,
-                "expected_damage": w.damage * w.attacks,
-                "attacks": w.attacks,
+                "expected_damage": w.damage * attacks,
+                "attacks": attacks,
                 "attacker_tag": None,
                 "target_tag": None,
             })
@@ -195,8 +199,8 @@ class WeaponValidator(UnitValidator):
                     "target_type": bonus_target,
                     "target_spawned": False,
                     "attacker_spawned": False,
-                    "expected_damage": (w.damage + bonus.bonus) * w.attacks,
-                    "attacks": w.attacks,
+                    "expected_damage": (w.damage + bonus.bonus) * attacks,
+                    "attacks": attacks,
                     "attacker_tag": None,
                     "target_tag": None,
                 })
