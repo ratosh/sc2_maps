@@ -98,4 +98,13 @@
         <Compare value="GT"/>
         <Behavior value="Has4ReaperBuff"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareCargo id="HasCargoValidator">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Type value="Used"/>
+    </CValidatorUnitCompareCargo>
+    <CValidatorUnitCompareCargo id="HasNoCargoValidator">
+        <WhichUnit Value="Caster"/>
+        <Type value="Used"/>
+    </CValidatorUnitCompareCargo>
 </Catalog>

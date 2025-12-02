@@ -36,4 +36,7 @@
 	<CBehaviorBuff id="Has4ReaperBuff">
 		<InfoFlags index="Hidden" value="0" />
 	</CBehaviorBuff>
+	<CBehaviorBuff id="MedivacUnloadingBuff">
+		<Duration value="1.1"/>
+	</CBehaviorBuff>
 </Catalog>

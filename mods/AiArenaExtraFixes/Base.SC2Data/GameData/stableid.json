@@ -10052,7 +10052,7 @@
         {
             "id": 325,
             "name": "TerranBuild",
-            "buttonname": "Refinery",
+            "buttonname": "",
             "index": 7
         },
         {
@@ -35794,6 +35794,10 @@
         {
             "id": 314,
             "name": "Has4ReaperBuff"
+        },
+        {
+            "id": 315,
+            "name": "MedivacUnloadingBuff"
         }
     ],
     "Effects": [
@@ -35803,73 +35807,61 @@
             "radius": null
         },
         {
-            "friendlyName": "PsiStorm",
             "id": 1,
             "name": "PsiStormPersistent",
             "radius": null
         },
         {
-            "friendlyName": "GuardianShield",
             "id": 2,
             "name": "GuardianShieldPersistent",
             "radius": null
         },
         {
-            "friendlyName": "TemporalFieldGrowing",
             "id": 3,
             "name": "TemporalFieldGrowingBubbleCreatePersistent",
             "radius": null
         },
         {
-            "friendlyName": "TemporalField",
             "id": 4,
             "name": "TemporalFieldAfterBubbleCreatePersistent",
             "radius": null
         },
         {
-            "friendlyName": "ThermalLance",
             "id": 5,
             "name": "ThermalLancesForward",
             "radius": null
         },
         {
-            "friendlyName": "ScannerSweep",
             "id": 6,
             "name": "ScannerSweep",
             "radius": null
         },
         {
-            "friendlyName": "NukeDot",
             "id": 7,
             "name": "NukePersistent",
             "radius": null
         },
         {
-            "friendlyName": "LiberatorDefenderZoneSetup",
             "id": 8,
             "name": "LiberatorTargetMorphDelayPersistent",
             "radius": null
         },
         {
-            "friendlyName": "LiberatorDefenderZone",
             "id": 9,
             "name": "LiberatorTargetMorphPersistent",
             "radius": null
         },
         {
-            "friendlyName": "BlindingCloud",
             "id": 10,
             "name": "BlindingCloudCP",
             "radius": null
         },
         {
-            "friendlyName": "CorrosiveBile",
             "id": 11,
             "name": "RavagerCorrosiveBileCP",
             "radius": null
         },
         {
-            "friendlyName": "LurkerSpines",
             "id": 12,
             "name": "LurkerMP",
             "radius": null

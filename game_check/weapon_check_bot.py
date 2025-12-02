@@ -48,72 +48,73 @@ FLYING_TYPES = {
 }
 
 EXPECTED_WEAPONS = {
-    # Terran
-    UnitTypeId.MARINE: 1,
-    UnitTypeId.MARAUDER: 1,
-    UnitTypeId.REAPER: 1,
-    UnitTypeId.GHOST: 1,
-    UnitTypeId.HELLION: 1,
-    UnitTypeId.HELLIONTANK: 1,
-    UnitTypeId.SIEGETANK: 1,
-    UnitTypeId.SIEGETANKSIEGED: 1,
-    UnitTypeId.THOR: 2,
-    UnitTypeId.THORAP: 2,
-    UnitTypeId.WIDOWMINE: 0,
-    UnitTypeId.WIDOWMINEBURROWED: 1,
-    UnitTypeId.CYCLONE: 1,
-    UnitTypeId.LIBERATOR: 1,
-    # UnitTypeId.LIBERATORAG: 1,
-    UnitTypeId.VIKINGFIGHTER: 1,
-    UnitTypeId.VIKINGASSAULT: 1,
-    UnitTypeId.BANSHEE: 1,
-    UnitTypeId.RAVEN: 0,
+    # # Terran
+    # UnitTypeId.MARINE: 1,
+    # UnitTypeId.MARAUDER: 1,
+    # UnitTypeId.REAPER: 1,
+    # UnitTypeId.GHOST: 1,
+    # UnitTypeId.HELLION: 1,
+    # UnitTypeId.HELLIONTANK: 1,
+    # UnitTypeId.SIEGETANK: 1,
+    # UnitTypeId.SIEGETANKSIEGED: 1,
+    # UnitTypeId.THOR: 2,
+    # UnitTypeId.THORAP: 2,
+    # UnitTypeId.WIDOWMINE: 0,
+    # UnitTypeId.WIDOWMINEBURROWED: 1,
+    # UnitTypeId.CYCLONE: 1,
+    # UnitTypeId.LIBERATOR: 1,
+    # # UnitTypeId.LIBERATORAG: 1,
+    # UnitTypeId.VIKINGFIGHTER: 1,
+    # UnitTypeId.VIKINGASSAULT: 1,
+    # UnitTypeId.BANSHEE: 1,
+    # UnitTypeId.RAVEN: 0,
+    # UnitTypeId.MEDIVAC: 0,
+    # UnitTypeId.BATTLECRUISER: 2,
+    # UnitTypeId.PLANETARYFORTRESS: 1,
+    # UnitTypeId.MISSILETURRET: 1,
+    #
+    # # Protoss
+    # UnitTypeId.ZEALOT: 1,
+    # UnitTypeId.STALKER: 1,
+    # UnitTypeId.ADEPT: 1,
+    # UnitTypeId.SENTRY: 1,
+    # UnitTypeId.IMMORTAL: 1,
+    # UnitTypeId.COLOSSUS: 1,
+    # UnitTypeId.DISRUPTOR: 0,
+    # UnitTypeId.ARCHON: 1,
+    # UnitTypeId.PHOENIX: 1,
+    # UnitTypeId.VOIDRAY: 1,
+    # UnitTypeId.ORACLE: 1,
+    # UnitTypeId.CARRIER: 0,
+    # UnitTypeId.INTERCEPTOR: 1,
+    # UnitTypeId.TEMPEST: 2,
+    # UnitTypeId.MOTHERSHIP: 1,
+    # # UnitTypeId.PHOTONCANNON: 1,
+    #
+    # # Zerg
+    # UnitTypeId.ZERGLING: 1,
+    # UnitTypeId.BANELING: 1,
+    # UnitTypeId.ROACH: 1,
+    # UnitTypeId.RAVAGER: 1,
+    # UnitTypeId.HYDRALISK: 1,
+    # UnitTypeId.LURKERMP: 0,
+    # UnitTypeId.LURKERMPBURROWED: 1,
+    # UnitTypeId.INFESTOR: 0,
+    # UnitTypeId.SWARMHOSTMP: 0,
+    # UnitTypeId.ULTRALISK: 1,
+    # UnitTypeId.QUEEN: 2,
+    # UnitTypeId.MUTALISK: 1,
+    # UnitTypeId.CORRUPTOR: 1,
+    # UnitTypeId.BROODLORD: 1,
+    # UnitTypeId.VIPER: 0,
+    # UnitTypeId.LOCUSTMP: 1,
+    # UnitTypeId.BROODLING: 1,
+    # UnitTypeId.SPORECRAWLER: 1,
+    # UnitTypeId.SPINECRAWLER: 1,
+    #
+    # # Special units
+    # UnitTypeId.BUNKER: 0,
     UnitTypeId.MEDIVAC: 0,
-    UnitTypeId.BATTLECRUISER: 2,
-    UnitTypeId.PLANETARYFORTRESS: 1,
-    UnitTypeId.MISSILETURRET: 1,
-
-    # Protoss
-    UnitTypeId.ZEALOT: 1,
-    UnitTypeId.STALKER: 1,
-    UnitTypeId.ADEPT: 1,
-    UnitTypeId.SENTRY: 1,
-    UnitTypeId.IMMORTAL: 1,
-    UnitTypeId.COLOSSUS: 1,
-    UnitTypeId.DISRUPTOR: 0,
-    UnitTypeId.ARCHON: 1,
-    UnitTypeId.PHOENIX: 1,
-    UnitTypeId.VOIDRAY: 1,
-    UnitTypeId.ORACLE: 1,
-    UnitTypeId.CARRIER: 0,
-    UnitTypeId.INTERCEPTOR: 1,
-    UnitTypeId.TEMPEST: 2,
-    UnitTypeId.MOTHERSHIP: 1,
-    # UnitTypeId.PHOTONCANNON: 1,
-
-    # Zerg
-    UnitTypeId.ZERGLING: 1,
-    UnitTypeId.BANELING: 1,
-    UnitTypeId.ROACH: 1,
-    UnitTypeId.RAVAGER: 1,
-    UnitTypeId.HYDRALISK: 1,
-    UnitTypeId.LURKERMP: 0,
-    UnitTypeId.LURKERMPBURROWED: 1,
-    UnitTypeId.INFESTOR: 0,
-    UnitTypeId.SWARMHOSTMP: 0,
-    UnitTypeId.ULTRALISK: 1,
-    UnitTypeId.QUEEN: 2,
-    UnitTypeId.MUTALISK: 1,
-    UnitTypeId.CORRUPTOR: 1,
-    UnitTypeId.BROODLORD: 1,
-    UnitTypeId.VIPER: 0,
-    UnitTypeId.LOCUSTMP: 1,
-    UnitTypeId.BROODLING: 1,
-    UnitTypeId.SPORECRAWLER: 1,
-    UnitTypeId.SPINECRAWLER: 1,
-
-    # Special units
-    UnitTypeId.BUNKER: 0,
 }
 
 
@@ -442,10 +443,14 @@ class BunkerValidator(UnitValidator):
             self.found_buffs.clear()
             self.current_config += 1
             self.current_load_idx = 1
-            bunker(AbilityId.UNLOADALL_BUNKER)
+            self.prepare_load = True
             return False, False
 
         if self.prepare_load:
+            if bunker.cargo_used > 0:
+                print(f"bunker {[order.ability.button_name for order in bunker.orders]} | {[buff.name for buff in bunker.buffs]}")
+                bunker(AbilityId.UNLOADALLAT, target=bunker.position)
+                return False, False
             helpers = bot.all_units.of_type(unit_type).take(self.current_load_idx)
             if len(helpers) >= self.current_load_idx:
                 self.helper_tags = [u.tag for u in helpers]
@@ -455,10 +460,12 @@ class BunkerValidator(UnitValidator):
             helpers = bot.all_units.tags_in(self.helper_tags)
             if helpers:
                 unit_to_load = helpers.first
-                bunker(AbilityId.LOAD_BUNKER, unit_to_load)
+                bunker(AbilityId.LOAD, unit_to_load)
                 return False, False
-            buffs = [buff for buff in bunker.buffs if buff not in self.found_buffs]
-            if len(buffs) < 1:
+            # buffs = [buff for buff in bunker.buffs if buff not in self.found_buffs]
+            data = bot.game_data.units[unit_type.value]
+            cargo_size = data._proto.cargo_size
+            if bunker.cargo_used < cargo_size * self.current_load_idx:
                 return False, False
 
         if len(bunker.buffs) > 1:
@@ -466,7 +473,6 @@ class BunkerValidator(UnitValidator):
         self.found_buffs.update(bunker.buffs)
         self.prepare_load = True
         self.current_load_idx += 1
-        bunker(AbilityId.UNLOADALL_BUNKER)
         return False, False
 
 
@@ -476,6 +482,7 @@ class ValidatorManager:
             UnitTypeId.VOIDRAY: WeaponBuffValidator,
             UnitTypeId.ORACLE: WeaponBuffValidator,
             UnitTypeId.BUNKER: BunkerValidator,
+            UnitTypeId.MEDIVAC: BunkerValidator,
         }
 
     def get_validator(self, unit_type):

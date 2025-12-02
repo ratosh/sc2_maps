@@ -65,11 +65,6 @@
         <Behavior value="Has4ReaperBuff" />
         <WhichUnit Value="Caster" />
     </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="BunkerLoadApplyGhostBuffEffect">
-        <Behavior value="BunkerLoadBuffGhost" />
-        <WhichUnit Value="Caster" />
-        <ValidatorArray value="IsGhost" />
-    </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="BunkerRemove1MarineBuffEffect">
         <BehaviorLink value="Has1MarineBuff" />
         <WhichUnit Value="Caster" />
@@ -290,9 +285,26 @@
         <EffectArray value="BunkerUnloadSwitch2GhostBuffEffect"/>
     </CEffectSet>
     <CEffectSet id="BunkerUnloadRemoveBuffEffectP2">
-        <EffectArray value="BunkerUnloadSwitch1ReaperBuffEffect" />
+        <EffectArray value="BunkerUnloadSwitch1ReaperBuffEffect"/>
         <EffectArray value="BunkerUnloadSwitch2ReaperBuffEffect"/>
         <EffectArray value="BunkerUnloadSwitch3ReaperBuffEffect"/>
         <EffectArray value="BunkerUnloadSwitch4ReaperBuffEffect"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="MedivacUnloadingApplyEffect">
+        <Behavior value="MedivacUnloadingBuff" />
+        <WhichUnit Value="Caster" />
+        <ValidatorArray value="HasCargoValidator" />
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="MedivacUnloadingRemoveEffect">
+        <BehaviorLink value="MedivacUnloadingBuff" />
+        <WhichUnit Value="Caster" />
+    </CEffectRemoveBehavior>
+    <CEffectSet id="MedivacUnloadedRemoveEffect">
+        <ValidatorArray value="HasNoCargoValidator" />
+        <EffectArray value="MedivacUnloadingRemoveEffect" />
+    </CEffectSet>
+    <CEffectSet id="MedivacUnloadingEffect">
+        <EffectArray value="MedivacUnloadingApplyEffect"/>
+        <EffectArray value="MedivacUnloadedRemoveEffect"/>
     </CEffectSet>
 </Catalog>
