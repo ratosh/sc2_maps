@@ -4,4 +4,7 @@
 		<LoadCargoEffect value="BunkerLoadApplyBuffEffect" />
 		<UnloadCargoEffect value="BunkerUnloadRemoveBuffEffect" />
 	</CAbilTransport>
+	<CAbilTransport id="MedivacTransport">
+		<UnloadTransportEffect value="MedivacUnloadingEffect" />
+	</CAbilTransport>
 </Catalog>

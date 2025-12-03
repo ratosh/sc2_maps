@@ -64,3 +64,4 @@ NOTE: Our custom buffs need to be included on that stable.json file too.
 ## TODO
 
 * Check terrain version (t3Terrain.xmml files), it needs to be 114;
+* Check if we can replace our custom build script with sc2modkit

@@ -72,7 +72,7 @@ EXPECTED_WEAPONS = {
     UnitTypeId.BATTLECRUISER: 2,
     UnitTypeId.PLANETARYFORTRESS: 1,
     UnitTypeId.MISSILETURRET: 1,
-
+    
     # Protoss
     UnitTypeId.ZEALOT: 1,
     UnitTypeId.STALKER: 1,
@@ -90,7 +90,7 @@ EXPECTED_WEAPONS = {
     UnitTypeId.TEMPEST: 2,
     UnitTypeId.MOTHERSHIP: 1,
     # UnitTypeId.PHOTONCANNON: 1,
-
+    
     # Zerg
     UnitTypeId.ZERGLING: 1,
     UnitTypeId.BANELING: 1,
@@ -111,7 +111,7 @@ EXPECTED_WEAPONS = {
     UnitTypeId.BROODLING: 1,
     UnitTypeId.SPORECRAWLER: 1,
     UnitTypeId.SPINECRAWLER: 1,
-
+    
     # Special units
     UnitTypeId.BUNKER: 0,
 }
@@ -442,10 +442,13 @@ class BunkerValidator(UnitValidator):
             self.found_buffs.clear()
             self.current_config += 1
             self.current_load_idx = 1
-            bunker(AbilityId.UNLOADALL_BUNKER)
+            self.prepare_load = True
             return False, False
 
         if self.prepare_load:
+            if bunker.cargo_used > 0:
+                bunker(AbilityId.UNLOADALL)
+                return False, False
             helpers = bot.all_units.of_type(unit_type).take(self.current_load_idx)
             if len(helpers) >= self.current_load_idx:
                 self.helper_tags = [u.tag for u in helpers]
@@ -455,10 +458,12 @@ class BunkerValidator(UnitValidator):
             helpers = bot.all_units.tags_in(self.helper_tags)
             if helpers:
                 unit_to_load = helpers.first
-                bunker(AbilityId.LOAD_BUNKER, unit_to_load)
+                bunker(AbilityId.LOAD, unit_to_load)
                 return False, False
-            buffs = [buff for buff in bunker.buffs if buff not in self.found_buffs]
-            if len(buffs) < 1:
+            # buffs = [buff for buff in bunker.buffs if buff not in self.found_buffs]
+            data = bot.game_data.units[unit_type.value]
+            cargo_size = data._proto.cargo_size
+            if bunker.cargo_used < cargo_size * self.current_load_idx:
                 return False, False
 
         if len(bunker.buffs) > 1:
@@ -466,7 +471,6 @@ class BunkerValidator(UnitValidator):
         self.found_buffs.update(bunker.buffs)
         self.prepare_load = True
         self.current_load_idx += 1
-        bunker(AbilityId.UNLOADALL_BUNKER)
         return False, False
 
 
